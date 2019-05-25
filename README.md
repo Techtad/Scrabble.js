@@ -5,23 +5,25 @@ Pozdrawiam
 TK
 
 Gra:
-1. Utworzenie planszy z zapisanymi współrzędnymi (15x15)
+1. Utworzenie planszy z zapisanymi współrzędnymi (15x15) - READY
     - opcjonalnie specjalne pola typu podwójne punkty albo inny syf (26)
-2. Utworzenie wszystkich kloców z literkami
+    - tablica literek - READY
+2. Utworzenie wszystkich kloców z literkami - READY
     - opcjonalnie np. jokery
-3. Mechanizm losowego dobierania klocków
-    - po kliknięciu w woreczek (wstępnie) gracz dostaje losowe literki
+3. Mechanizm losowego dobierania klocków - READY
+    - po kliknięciu w woreczek (wstępnie) gracz dostaje losowe literki - READY (jest guzik ale still dziala, kwestia zmiany raczej nie bedzie skomplikowana)
     - model woreczka (?)
-4. Możliwość umieszczania klocków na planszy i ich ściągania
-5. Interfejs - zatwierdzanie itp.
-5. Mechanizm sprawdzania i zatwierdzania (bądź nie) słów z bazy
-    - nie wiem jak to wytlumaczyc i w praktyce jeszcze nie wiem czy mój pomysł będzie śmigał
-6. Podłączenie drugiego gracza
-7. Każdy dostaje swoje literki
-8. Turowość (bez ograniczeń czasowych chyba bo trzeba dać pomyśleć)
-9. Możliwość wygranej (liczenie punktów za słowa) (win condition albo jak się zdobędzie x punktów, albo jak się skończy miejsce, ale to będzie ciężej zrobić)
-10. Światełko żeby było
-11. Inne informacje
+4. Możliwość umieszczania klocków na planszy i ich ściągania - READY (sciaganie wszystkich naraz jak na razie - guzik "Reset word")
+5. Interfejs - zatwierdzanie itp. - READY
+6. Mechanizm sprawdzania i zatwierdzania - READY
+    - może być jedno słowo tworzone naraz
+7. Porównywanie słów z bazą
+8. Podłączenie drugiego gracza
+9. Każdy dostaje swoje literki
+10. Turowość (bez ograniczeń czasowych chyba bo trzeba dać pomyśleć)
+11. Możliwość wygranej (liczenie punktów za słowa) (win condition albo jak się zdobędzie x punktów, albo jak się skończy miejsce, ale to będzie ciężej zrobić)
+12. Światełko żeby było
+13. Inne informacje
 
 Inne:
 1. Dokumentacja

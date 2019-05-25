@@ -1,10 +1,12 @@
 var Program = {
-    init: function () {
+    init: function() {
         Game.init()
     }
 }
 
-window.addEventListener("DOMContentLoaded", function (event) {
+window.addEventListener("DOMContentLoaded", function(event) {
     Program.init()
     Game.start()
+    Ui.clicks()
+
 })
