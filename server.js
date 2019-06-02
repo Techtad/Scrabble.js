@@ -1,10 +1,12 @@
 var http = require("http")
 var fs = require("fs")
 var socketio = require("socket.io")
+var sessions = require("./server/sessions.js")
 
+var FilesDir = "client"
 function sendFile(fileName, res) {
     if (fileName == "/") fileName = "/index.html"
-    fs.readFile(`${__dirname}/${fileName}`, function (error, data) {
+    fs.readFile(`${__dirname}/${FilesDir}/${fileName}`, function (error, data) {
         if (error) {
             console.log(error)
             res.writeHead(404, { "Content-Type": "text/html;charset=utf-8" })
