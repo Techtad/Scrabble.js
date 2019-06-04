@@ -4,6 +4,13 @@ var Game = {
 
         this.tilesTab = []
 
+        this.turnSkipCount = 0
+
+        this.scoreboard = {
+            player: "player",
+            score: 0
+        }
+
         this.boardTab = [
             ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
             ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
@@ -36,6 +43,10 @@ var Game = {
         this.firstMove = true
 
         this.centerTaken = false
+
+        this.exchange = false
+
+        this.exchangeTab = []
 
         this.scene = new THREE.Scene()
 
@@ -144,6 +155,7 @@ var Game = {
     giveLetter: function() {
 
         //wylosowanie płytki z literą z tablicy i wrzucenie jej graczowi na tackę
+        //zautomatyzowane już, ponieważ zawsze musi być maks płytek na tacce, po kliknięciu Start Game to się uruchamia 15 razy.
         var randNum = Math.floor(Math.random() * 26)
         console.log(this.letterBlocksTab[randNum])
         for (var trayCheck = 0; trayCheck < this.trayTab.length; trayCheck++) {
@@ -183,14 +195,25 @@ var Game = {
             var obj = this.intersects[0].object
             console.log(obj)
             if (obj.name.split("_")[0] == "letterBlock") {
-                this.letterSelect()
+                if (!this.exchange) {
+                    this.letterSelect()
+                } else {
+                    this.exchangeMode()
+                }
             } else if (obj.name.split("_")[0] == "letter") {
                 this.intersects[0].object = this.intersects[0].object.parent
-                this.letterSelect()
+                if (!this.exchange) {
+                    this.letterSelect()
+                } else {
+                    this.exchangeMode()
+                }
             } else if (obj.name.split("_")[0] == "tray") {
                 this.trayMove()
             } else if (obj.name.split("_")[0] == "tile") {
-                this.letterPlaceCheck()
+                if (this.selectedLetter != null) {
+                    this.letterPlaceCheck()
+                }
+
             }
         }
     },
@@ -258,70 +281,104 @@ var Game = {
     },
 
     letterPlaceCheck: function() {
+
         var obj = this.intersects[0].object
         var isNeighbor = false
+        var underneath = false
             //jesli to dopiero pierwszy ruch (żółty klocek nie został jeszcze zasłoniony) - algorytm ten tu o zaraz pod tym
-        if (this.firstMove) {
-            if (this.wordTab.length == 0) {
-                //jeśli nie ma żadnego klocka na planszy można postawić gdziekolwiek
-                this.letterPlace()
-            } else if (this.wordTab.length == 1) {
-                //jeśli jest już jeden klocek następuje sprawdzenie czy jest stawiany w poziomie lub pionie
-                if (obj.position.x == this.wordTab[0].position.x) {
-                    this.verticalCheck()
-
-                } else if (obj.position.z == this.wordTab[0].position.z) {
-                    this.horizontalCheck()
-
-                }
+        for (var z = 0; z < this.boardTab.length; z++) {
+            if (underneath) {
+                break
             } else {
-                //jesli są więcej niz 2 klocki na planszy, kierunek jest narzucony: poziomy albo pionowy (sprawdzanie sąsiadów jak wyżej)
-                if (!this.isHorizontal) {
-                    if (obj.position.x == this.wordTab[0].position.x) {
-                        this.verticalCheck()
-                    }
-                } else {
-                    if (obj.position.z == this.wordTab[0].position.z) {
-                        this.horizontalCheck()
-                    }
-                }
-            }
-        } else {
-            if (this.wordTab.length == 0) {
-                this.neighborCheck()
-            } else {
-                //jesli są już klocki na planszy, kierunek jest narzucony
-                if (!this.isHorizontal) {
-                    if (obj.position.x == this.wordTab[0].position.x) {
-                        for (var wordCheck = 0; wordCheck < this.wordTab.length; wordCheck++) {
-                            var neighbor = this.wordTab[wordCheck]
-                            console.log(obj.position.z, neighbor.position.z)
-                            if (obj.position.z == neighbor.position.z + 10 || obj.position.z == neighbor.position.z - 10) {
-                                isNeighbor = true
+                for (var x = 0; x < this.boardTab[z].length; x++) {
+                    if (this.boardTab[z][x] != "/") {
+                        if (this.intersects[0].object.position.x == this.boardTab[z][x].position.x) {
+                            if (this.intersects[0].object.position.z == this.boardTab[z][x].position.z) {
+                                underneath = true
                                 break
                             }
-                        }
-                        if (isNeighbor) {
-                            this.neighborCheck()
-                        }
-                    }
-                } else {
-                    if (obj.position.z == this.wordTab[0].position.z) {
-                        for (var wordCheck = 0; wordCheck < this.wordTab.length; wordCheck++) {
-                            var neighbor = this.wordTab[wordCheck]
-                            console.log(obj.position.x, neighbor.position.x)
-                            if (obj.position.x == neighbor.position.x + 10 || obj.position.x == neighbor.position.x - 10) {
-                                isNeighbor = true
-                                break
-                            }
-                        }
-                        if (isNeighbor) {
-                            this.neighborCheck()
                         }
                     }
                 }
             }
         }
+        for (var count = 0; count < this.wordTab.length; count++) {
+            if (underneath) {
+                break
+            } else {
+                if (this.intersects[0].object.position.x == this.wordTab[count].position.x) {
+                    if (this.intersects[0].object.position.z == this.wordTab[count].position.z) {
+                        underneath = true
+                    }
+                }
+            }
+        }
+
+
+        if (!underneath) {
+            if (this.firstMove) {
+                if (this.wordTab.length == 0) {
+                    //jeśli nie ma żadnego klocka na planszy można postawić gdziekolwiek
+                    this.letterPlace()
+                } else if (this.wordTab.length == 1) {
+                    //jeśli jest już jeden klocek następuje sprawdzenie czy jest stawiany w poziomie lub pionie
+                    if (obj.position.x == this.wordTab[0].position.x) {
+                        this.verticalCheck()
+
+                    } else if (obj.position.z == this.wordTab[0].position.z) {
+                        this.horizontalCheck()
+
+                    }
+                } else {
+                    //jesli są więcej niz 2 klocki na planszy, kierunek jest narzucony: poziomy albo pionowy (sprawdzanie sąsiadów jak wyżej)
+                    if (!this.isHorizontal) {
+                        if (obj.position.x == this.wordTab[0].position.x) {
+                            this.verticalCheck()
+                        }
+                    } else {
+                        if (obj.position.z == this.wordTab[0].position.z) {
+                            this.horizontalCheck()
+                        }
+                    }
+                }
+            } else {
+                if (this.wordTab.length == 0) {
+                    this.neighborCheck()
+                } else {
+                    //jesli są już klocki na planszy, kierunek jest narzucony
+                    if (!this.isHorizontal) {
+                        if (obj.position.x == this.wordTab[0].position.x) {
+                            for (var wordCheck = 0; wordCheck < this.wordTab.length; wordCheck++) {
+                                var neighbor = this.wordTab[wordCheck]
+                                console.log(obj.position.z, neighbor.position.z)
+                                if (obj.position.z == neighbor.position.z + 10 || obj.position.z == neighbor.position.z - 10) {
+                                    isNeighbor = true
+                                    break
+                                }
+                            }
+                            if (isNeighbor) {
+                                this.neighborCheck()
+                            }
+                        }
+                    } else {
+                        if (obj.position.z == this.wordTab[0].position.z) {
+                            for (var wordCheck = 0; wordCheck < this.wordTab.length; wordCheck++) {
+                                var neighbor = this.wordTab[wordCheck]
+                                console.log(obj.position.x, neighbor.position.x)
+                                if (obj.position.x == neighbor.position.x + 10 || obj.position.x == neighbor.position.x - 10) {
+                                    isNeighbor = true
+                                    break
+                                }
+                            }
+                            if (isNeighbor) {
+                                this.neighborCheck()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     },
 
     verticalCheck: function() {
@@ -368,6 +425,7 @@ var Game = {
         var neighbors = []
         var axis
         console.log(this.boardTab)
+            //sprawdzanie czy są sąsiedzi bo nie może być więcej niż jednego (dodatkowe ify na zapobiegniecie sprawdzaniu poza tablicą)
         if (axisZ != 0) {
             if (this.boardTab[axisZ - 1][axisX] != "/") {
                 neighbors.push(this.boardTab[axisZ - 1][axisX])
@@ -404,8 +462,11 @@ var Game = {
                 axis = "horizontal"
             }
         }
+        //jesli slowo nie zostalo zaczete
         if (this.wordTab.length == 0) {
+            //jesli jest tylko jeden sąsiad (tylko taka opcja jest dopuszczalna)
             if (neighbors.length == 1) {
+                //sasiad i wszystkie nastepne literki w linii prostej musza zostac dopisane do tablicy liter tworzacych slowo
                 if (axis == "horizontal") {
                     this.isHorizontal = true
                     while (this.boardTab[indexZ][indexX] != "/") {
@@ -436,6 +497,7 @@ var Game = {
                 this.letterPlace()
             }
         } else {
+            //jesli slowo zostalo zaczete 
             if (neighbors.length == 1) {
                 if (this.wordTab.indexOf(neighbors[0]) != "-1") {
                     this.letterPlace()
@@ -468,6 +530,11 @@ var Game = {
             this.selectedLetter = null
 
         }
+
+        $("#placeWord").prop("disabled", false)
+        $("#wordReset").prop("disabled", false)
+        $("#exchangeMode").prop("disabled", true)
+        $("#skip").prop("disabled", true)
     },
 
     resetWord: function() {
@@ -498,9 +565,14 @@ var Game = {
         }
         this.wordTab = []
         this.isHorizontal = null
+        $("#placeWord").prop("disabled", true)
+        $("#wordReset").prop("disabled", true)
+        $("#exchangeMode").prop("disabled", false)
+        $("#skip").prop("disabled", false)
     },
 
     centerCheck: function() {
+        //sprawdzenie czy został zajęty środkowy klocek (tylko przy pierwszym słowie)
         for (var count = 0; count < this.wordTab.length; count++) {
             if (this.wordTab[count].position.x == 70 && this.wordTab[count].position.z == 70) {
                 this.centerTaken = true
@@ -515,6 +587,7 @@ var Game = {
     },
 
     acceptWord: function() {
+        //zanim litery zostaną zaakceptowane na planszy to pętla leci przez tablicę, aby zapisać utworzone słowo w odpowiedniej kolejności do zmiennej (potem pewnie przerobimy na tablice czy coś)
         var word = ""
         if (this.isHorizontal) {
             var zAxis
@@ -578,6 +651,7 @@ var Game = {
             console.log(word)
 
         }
+        //zaakceptowanie klocków na planszy
         for (var countWord = 0; countWord < this.wordTab.length; countWord++) {
             var obj = this.wordTab[countWord]
             var tileX = obj.position.x / 10
@@ -593,10 +667,73 @@ var Game = {
                 }
             }
         }
+        var length = this.wordTab.length
         this.wordTab = []
         this.isHorizontal = null
         this.firstMove = false
+        this.turnSkipCount = 0
         console.log(this.boardTab)
+        $("#placeWord").prop("disabled", true)
+        $("#wordReset").prop("disabled", true)
+        $("#exchangeMode").prop("disabled", false)
+        $("#skip").prop("disabled", false)
+        Game.scoreboard.score += length
+        $("#scoreboard").html("<h3>" + Game.scoreboard.player + " : " + Game.scoreboard.score + "</h3>")
+        var draw = setInterval(function() {
+            if (length <= 0) {
+                clearInterval(draw)
+            } else {
+                Game.giveLetter()
+                length--
+            }
+
+        }, 100)
+    },
+
+    exchangeMode: function() {
+
+        //obsługa trybu wymiany literek (kolorowanie/odkolorowanie płytek)
+        var obj = this.intersects[0].object
+        if (this.exchangeTab.indexOf(obj) == -1) {
+            this.exchangeTab.push(obj)
+            obj.color = "orange"
+            obj.material = obj.color
+        } else {
+            var index = this.exchangeTab.indexOf(obj)
+            this.exchangeTab.splice(index, 1)
+            obj.color = "white"
+            obj.material = obj.color
+        }
+
+    },
+
+    exchangeLetters: function() {
+        //wymiana literek i automatyczny dobór
+        var del
+        var length = this.exchangeTab.length
+        for (var count = 0; count < this.exchangeTab.length; count++) {
+            del = this.exchangeTab[count]
+            this.scene.remove(del)
+            if (this.trayTab.indexOf(del) != -1) {
+                var index = this.trayTab.indexOf(del)
+                this.trayTab[index] = "/"
+            }
+        }
+        $("#exchangeMode").text("REDRAW LETTERS")
+        $("#exchange").prop("disabled", true)
+        this.exchange = false
+
+        var redraw = setInterval(function() {
+            if (length <= 0) {
+                clearInterval(redraw)
+            } else {
+                Game.giveLetter()
+                length--
+            }
+
+        }, 100)
+        this.exchangeTab = []
+        this.turnSkipCount = 0
     },
 
     start: function() {

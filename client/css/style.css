@@ -11,4 +11,85 @@ canvas {
 #ui {
     position: fixed;
     z-index: 1;
+    width: 224px;
+    height: 275px;
+    border: 2px orange outset;
+    background: yellow;
+    border-radius: 5px;
+}
+
+#scoreboard {
+    position: fixed;
+    z-index: 1;
+    right: 0;
+    width: 224px;
+    height: 275px;
+    border: 2px orange outset;
+    background: yellow;
+    border-radius: 5px;
+}
+
+button {
+    border: 2px orange outset;
+    background: white;
+    color: darkorange;
+    border-radius: 5px;
+}
+
+button:disabled,
+button[disabled] {
+    background: black;
+}
+
+#letterGet {
+    position: absolute;
+    top: 30px;
+    left: 10px;
+    width: 200px;
+    height: 50px;
+}
+
+#placeWord {
+    position: absolute;
+    top: 90px;
+    left: 10px;
+    width: 95px;
+    height: 50px;
+}
+
+#wordReset {
+    position: absolute;
+    top: 90px;
+    left: 115px;
+    width: 95px;
+    height: 50px;
+}
+
+#exchangeMode {
+    position: absolute;
+    top: 150px;
+    left: 10px;
+    width: 95px;
+    height: 50px;
+}
+
+#exchange {
+    position: absolute;
+    top: 150px;
+    left: 115px;
+    width: 95px;
+    height: 50px;
+}
+
+#skip {
+    position: absolute;
+    top: 210px;
+    left: 10px;
+    width: 200px;
+    height: 50px;
+}
+
+h3 {
+    color: darkorange;
+    text-align: center;
 }
