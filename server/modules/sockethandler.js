@@ -68,6 +68,42 @@ module.exports = function (SocketServer) { //SocketHandler
 
             client.emit("get-board-resp", { board: Game.getBoard() })
         })
+
+        client.on("send-nickname", function (data) {
+            let Session = SessionManager.getSessionByClientId(client.id)
+            if (!Session) return
+            let Game = Session.getGame()
+
+            if (!data.nickname) client.emit("send-nickname-resp", { accepted: false })
+            if (client.id == Session.clientA.id) {
+                if (Game.getNicknames().b == data.nickname) client.emit("send-nickname-resp", { accepted: false })
+                else {
+                    Game.setNicknameA(data.nickname)
+                    client.emit("send-nickname-resp", { accepted: true })
+                    let nicknames = Game.getNicknames()
+                    if (Session.clientB) Session.clientB.emit("nickname-update-resp", { mine: nicknames.b, opponents: nicknames.a })
+                }
+            }
+            else if (Session.clientB && client.id == Session.clientB.id) {
+                if (Game.getNicknames().a == data.nickname) client.emit("send-nickname-resp", { accepted: false })
+                else {
+                    Game.setNicknameB(data.nickname)
+                    client.emit("send-nickname-resp", { accepted: true })
+                    let nicknames = Game.getNicknames()
+                    Session.clientA.emit("nickname-update-resp", { mine: nicknames.a, opponents: nicknames.b })
+                    Session.clientB.emit("nickname-update-resp", { mine: nicknames.b, opponents: nicknames.a })
+                }
+            }
+        })
+        client.on("get-nicknames", function (data) {
+            let Session = SessionManager.getSessionByClientId(client.id)
+            if (!Session) return
+            let Game = Session.getGame()
+
+            let nicknames = Game.getNicknames()
+            if (client.id == Session.clientA.id) client.emit("get-nicknames-resp", { mine: nicknames.a, opponents: nicknames.b })
+            else if (Session.clientB && client.id == Session.clientB.id) client.emit("get-nicknames-resp", { mine: nicknames.b, opponents: nicknames.a })
+        })
     })
 
     //dodatkowe funkcje

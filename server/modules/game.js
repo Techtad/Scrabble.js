@@ -3,6 +3,8 @@ class ScrabbleGame {
         this.playerAScore = 0
         this.playerBScore = 0
         this.board = []
+        this.nicknameA = ""
+        this.nicknameB = ""
     }
 
     setScoreA(score) {
@@ -23,6 +25,18 @@ class ScrabbleGame {
 
     getBoard() {
         return this.board
+    }
+
+    setNicknameA(nickname) {
+        this.nicknameA = nickname
+    }
+
+    setNicknameB(nickname) {
+        this.nicknameB = nickname
+    }
+
+    getNicknames() {
+        return { a: this.nicknameA, b: this.nicknameB }
     }
 }
 

@@ -20,12 +20,13 @@ class Session {
             console.log(`Klient ${client.id} próbował dołączyć do pełnej sesji o id ${this.id}`)
             return
         }
+        let firstTurn = this.clientA == null
         if (this.clientA == null) this.clientA = client
         else if (this.clientB == null) {
             this.clientB = client
             this.started = true
         }
-        client.emit("session-joined-resp", { sessionId: this.id })
+        client.emit("session-joined-resp", { sessionId: this.id, myTurn: firstTurn })
     }
 
     hasRoom() {

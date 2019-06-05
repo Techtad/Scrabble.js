@@ -1,19 +1,39 @@
 var EventList = ["check-word",
     "session-joined", "session-closed",
     "send-score", "get-scores", "score-update",
-    "send-board", "get-board", "board-update"]
+    "send-board", "get-board", "board-update",
+    "send-nickname", "get-nicknames", "nickname-update"]
 
 var SocketHander = {
     client: null,
     init: function (socket) {
         this.client = socket
         this.responseHandlers()
+
+        this.addResponseCallback("session-closed", function (data) {
+            alert(`Session closed, reason: ${data.reason}`)
+        })
+
         this.addResponseCallback("score-update", function (data) {
             console.log("tutaj będzie wyświetlanie zaktualizowanych wyników", data)
         })
         this.addResponseCallback("board-update", function (data) {
             console.log("tutaj będzie aktualizacja planszy", data)
         })
+        this.addResponseCallback("nickname-update", function (data) {
+            console.log("otrzymano info o nazwach graczy", data)
+        })
+
+        this.addResponseCallback("send-nickname", function (data) {
+            if (!data.accepted) {
+                let nick = prompt("Nickname taken, try again:")
+                SocketHander.emit("send-nickname", { nickname: nick })
+            }
+        })
+
+        let nick = prompt("Enter nickname:")
+        while (!nick) nick = prompt("Enter non-empty nickname:")
+        SocketHander.emit("send-nickname", { nickname: nick })
     },
 
     callbacks: [],
@@ -29,7 +49,7 @@ var SocketHander = {
     emit: function (event, data, callback) {
         if (!EventList.includes(event)) { console.log(`Niepoprawny event socketowy: ${event}`); return }
 
-        this.callbacks[event] = callback
+        if (callback) this.callbacks[event] = callback
         this.client.emit(event, data)
     },
 
