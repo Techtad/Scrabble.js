@@ -1,4 +1,4 @@
-var EventList = ["check-word"]
+var EventList = ["check-word", "session-joined", "session-closed", "send-score", "get-scores"]
 
 var SocketHander = {
     client: null,
@@ -22,5 +22,11 @@ var SocketHander = {
 
         this.callbacks[event] = callback
         this.client.emit(event, data)
+    },
+
+    addResponseCallback(event, callback) {
+        if (!EventList.includes(event)) { console.log(`Niepoprawny event socketowy: ${event}`); return }
+
+        this.callbacks[event] = callback
     }
 }
