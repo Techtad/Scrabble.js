@@ -19,5 +19,7 @@ server.listen(3000, function () {
     console.log("Start serwera na porcie " + port)
 })
 
-var socketServer = socketio.listen(server)
+var SocketServer = socketio.listen(server)
 console.log("Start Socket.io")
+
+var SocketHandler = require("./server/modules/sockethandler.js")(SocketServer)

@@ -1,5 +1,5 @@
 var Game = {
-    init: function() {
+    init: function () {
         this.paused = true
 
         this.tilesTab = []
@@ -70,19 +70,15 @@ var Game = {
 
         this.clock = new THREE.Clock()
 
-        this.socket = new io()
-
         this.grid = new Grid(1000, 100)
         this.scene.add(this.grid.getGrid())
 
         this.createScene()
 
-
-
         $("#root").append(this.renderer.domElement)
     },
 
-    createScene: function() {
+    createScene: function () {
         this.entities = [] //wszystko co ma być updatowane co klatkę wchodzi do tej tablicy
 
         this.boardGen()
@@ -94,7 +90,7 @@ var Game = {
         //tutaj dodawanie obiektów do sceny
     },
 
-    boardGen: function() {
+    boardGen: function () {
 
         //generowanie całej planszy
         for (var tileCount_z = 0; tileCount_z < 15; tileCount_z++) {
@@ -120,27 +116,27 @@ var Game = {
 
     },
 
-    letterBlockGen: function() {
+    letterBlockGen: function () {
 
         //generowanie wszystkich klocków (26 płytek z literkami) i dodanie ich do tablicy
         TileGen.type = "letter"
         TileGen.color = "white"
         for (var letterCount = 0; letterCount < this.lettersTab.length; letterCount++) {
             var letterTile = new Tile(null, null, this.lettersTab[letterCount], letterCount)
-                //console.log(letterTile)
+            //console.log(letterTile)
 
             this.letterBlocksTab.push(letterTile)
-                //console.log(this.letterBlocksTab)
-                //this.scene.add(letterTile)
+            //console.log(this.letterBlocksTab)
+            //this.scene.add(letterTile)
         }
         for (var letterCount = 0; letterCount < this.letterBlocksTab.length; letterCount++) {
             var letter = new Letter(this.lettersTab[letterCount], letterCount)
-                //console.log(letter)
+            //console.log(letter)
         }
 
     },
 
-    trayCreate: function() {
+    trayCreate: function () {
 
         //stworzenie tacki (?) dla gracza składającej się z 15 części
         this.tr = new Tray()
@@ -152,7 +148,7 @@ var Game = {
 
     },
 
-    giveLetter: function() {
+    giveLetter: function () {
 
         //wylosowanie płytki z literą z tablicy i wrzucenie jej graczowi na tackę
         //zautomatyzowane już, ponieważ zawsze musi być maks płytek na tacce, po kliknięciu Start Game to się uruchamia 15 razy.
@@ -173,12 +169,12 @@ var Game = {
 
     },
 
-    createRayCaster: function() {
+    createRayCaster: function () {
         this.raycaster = new THREE.Raycaster()
         this.mouseVector = new THREE.Vector2()
     },
 
-    rayClick: function() {
+    rayClick: function () {
 
         //obsługa raycastera w zależności od tego, co zostało kliknięte
         this.mouseVector.x = (event.clientX / $(window).width()) * 2 - 1;
@@ -218,7 +214,7 @@ var Game = {
         }
     },
 
-    letterSelect: function() {
+    letterSelect: function () {
 
         //wybór i podświetlenie klocka
         //klocki szare - leżące na planszy, ale nie zatwierdzone (możliwe do cofnięcia, lecz niemożliwe do pojedynczego przestawienia)
@@ -259,11 +255,11 @@ var Game = {
         }
     },
 
-    trayMove: function() {
+    trayMove: function () {
         var obj = this.intersects[0].object
-            //jeśli jakiś klocek jest zaznaczony i nie znajduje się na planszy, tylko na trayu, następuje zmiana miejsca w trayu i w tablicy
-            //WAŻNE - jeśli klocek X został postawiony na planszy, a później klocek Y zostanie postawiony na trayu na poprzednim miejscu klocka X...
-            //...to klocek X po zdjeciu z planszy wskoczy na poprzednie miejsce klocka Y
+        //jeśli jakiś klocek jest zaznaczony i nie znajduje się na planszy, tylko na trayu, następuje zmiana miejsca w trayu i w tablicy
+        //WAŻNE - jeśli klocek X został postawiony na planszy, a później klocek Y zostanie postawiony na trayu na poprzednim miejscu klocka X...
+        //...to klocek X po zdjeciu z planszy wskoczy na poprzednie miejsce klocka Y
         if (this.selectedLetter != null) {
             if (this.wordTab.indexOf(this.selectedLetter) == "-1") {
                 var clickedID = obj.name.split("_")[1]
@@ -280,12 +276,12 @@ var Game = {
         }
     },
 
-    letterPlaceCheck: function() {
+    letterPlaceCheck: function () {
 
         var obj = this.intersects[0].object
         var isNeighbor = false
         var underneath = false
-            //jesli to dopiero pierwszy ruch (żółty klocek nie został jeszcze zasłoniony) - algorytm ten tu o zaraz pod tym
+        //jesli to dopiero pierwszy ruch (żółty klocek nie został jeszcze zasłoniony) - algorytm ten tu o zaraz pod tym
         for (var z = 0; z < this.boardTab.length; z++) {
             if (underneath) {
                 break
@@ -381,12 +377,12 @@ var Game = {
 
     },
 
-    verticalCheck: function() {
+    verticalCheck: function () {
         var obj = this.intersects[0].object
         var isNeighbor = false
         for (var wordCheck = 0; wordCheck < this.wordTab.length; wordCheck++) {
             var neighbor = this.wordTab[wordCheck]
-                //jesli stawiany w poziomie, sprawdzenie czy po lewej lub po prawej jest jakiś inny klocek (nie mozna zrobic dziur w slowach, ale mozna dokladac z dowolnej jego strony)
+            //jesli stawiany w poziomie, sprawdzenie czy po lewej lub po prawej jest jakiś inny klocek (nie mozna zrobic dziur w slowach, ale mozna dokladac z dowolnej jego strony)
             if (obj.position.z == neighbor.position.z + 10 || obj.position.z == neighbor.position.z - 10) {
                 isNeighbor = true
                 break
@@ -398,12 +394,12 @@ var Game = {
         }
     },
 
-    horizontalCheck: function() {
+    horizontalCheck: function () {
         var obj = this.intersects[0].object
         var isNeighbor = false
         for (var wordCheck = 0; wordCheck < this.wordTab.length; wordCheck++) {
             var neighbor = this.wordTab[wordCheck]
-                //jesli stawiany w pionie, sprawdzenie czy nad nim lub pod nim jest inny klocek (nie mozna zrobic dziur w slowach, ale mozna dokladac z dowolnej jego strony)
+            //jesli stawiany w pionie, sprawdzenie czy nad nim lub pod nim jest inny klocek (nie mozna zrobic dziur w slowach, ale mozna dokladac z dowolnej jego strony)
             if (obj.position.x == neighbor.position.x + 10 || obj.position.x == neighbor.position.x - 10) {
                 isNeighbor = true
                 break
@@ -415,7 +411,7 @@ var Game = {
         }
     },
 
-    neighborCheck: function() {
+    neighborCheck: function () {
         var obj = this.intersects[0].object
         var axisZ = obj.name.split("_")[2]
         var axisX = obj.name.split("_")[1]
@@ -425,7 +421,7 @@ var Game = {
         var neighbors = []
         var axis
         console.log(this.boardTab)
-            //sprawdzanie czy są sąsiedzi bo nie może być więcej niż jednego (dodatkowe ify na zapobiegniecie sprawdzaniu poza tablicą)
+        //sprawdzanie czy są sąsiedzi bo nie może być więcej niż jednego (dodatkowe ify na zapobiegniecie sprawdzaniu poza tablicą)
         if (axisZ != 0) {
             if (this.boardTab[axisZ - 1][axisX] != "/") {
                 neighbors.push(this.boardTab[axisZ - 1][axisX])
@@ -511,7 +507,7 @@ var Game = {
 
     },
 
-    letterPlace: function() {
+    letterPlace: function () {
         //jeśli wszystkie warunki postawienia klocka zostały spełnione, następuje jego postawienie
 
         var obj = this.intersects[0].object
@@ -537,7 +533,7 @@ var Game = {
         $("#skip").prop("disabled", true)
     },
 
-    resetWord: function() {
+    resetWord: function () {
 
         //cofnięcie wszystkich klocków na tray na miejsca wdg tablicy
         var obj
@@ -571,7 +567,7 @@ var Game = {
         $("#skip").prop("disabled", false)
     },
 
-    centerCheck: function() {
+    centerCheck: function () {
         //sprawdzenie czy został zajęty środkowy klocek (tylko przy pierwszym słowie)
         for (var count = 0; count < this.wordTab.length; count++) {
             if (this.wordTab[count].position.x == 70 && this.wordTab[count].position.z == 70) {
@@ -586,7 +582,7 @@ var Game = {
         }
     },
 
-    acceptWord: function() {
+    acceptWord: function () {
         //zanim litery zostaną zaakceptowane na planszy to pętla leci przez tablicę, aby zapisać utworzone słowo w odpowiedniej kolejności do zmiennej (potem pewnie przerobimy na tablice czy coś)
         var word = ""
         if (this.isHorizontal) {
@@ -651,6 +647,9 @@ var Game = {
             console.log(word)
 
         }
+
+        SocketHander.emit("check-word", { word: word })
+
         //zaakceptowanie klocków na planszy
         for (var countWord = 0; countWord < this.wordTab.length; countWord++) {
             var obj = this.wordTab[countWord]
@@ -679,7 +678,7 @@ var Game = {
         $("#skip").prop("disabled", false)
         Game.scoreboard.score += length
         $("#scoreboard").html("<h3>" + Game.scoreboard.player + " : " + Game.scoreboard.score + "</h3>")
-        var draw = setInterval(function() {
+        var draw = setInterval(function () {
             if (length <= 0) {
                 clearInterval(draw)
             } else {
@@ -690,7 +689,7 @@ var Game = {
         }, 100)
     },
 
-    exchangeMode: function() {
+    exchangeMode: function () {
 
         //obsługa trybu wymiany literek (kolorowanie/odkolorowanie płytek)
         var obj = this.intersects[0].object
@@ -707,7 +706,7 @@ var Game = {
 
     },
 
-    exchangeLetters: function() {
+    exchangeLetters: function () {
         //wymiana literek i automatyczny dobór
         var del
         var length = this.exchangeTab.length
@@ -723,7 +722,7 @@ var Game = {
         $("#exchange").prop("disabled", true)
         this.exchange = false
 
-        var redraw = setInterval(function() {
+        var redraw = setInterval(function () {
             if (length <= 0) {
                 clearInterval(redraw)
             } else {
@@ -736,12 +735,12 @@ var Game = {
         this.turnSkipCount = 0
     },
 
-    start: function() {
+    start: function () {
         this.orbitControls.enabled = true
         this.resume()
     },
 
-    update: function() {
+    update: function () {
         let delta = this.clock.getDelta()
 
         for (let entity of this.entities) entity.update(delta)
@@ -749,17 +748,17 @@ var Game = {
         this.render()
     },
 
-    render: function() {
+    render: function () {
         this.renderer.render(this.scene, this.camera)
         if (!this.paused)
             requestAnimationFrame(this.update.bind(this))
     },
 
-    pause: function() {
+    pause: function () {
         this.paused = true
     },
 
-    resume: function() {
+    resume: function () {
         this.paused = false
         requestAnimationFrame(this.update.bind(this))
     }
