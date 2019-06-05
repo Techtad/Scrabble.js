@@ -15,7 +15,7 @@ var SocketHander = {
         })
 
         this.addResponseCallback("score-update", function (data) {
-            console.log("tutaj będzie wyświetlanie zaktualizowanych wyników", data)
+            //console.log("tutaj będzie wyświetlanie zaktualizowanych wyników", data)
             Game.scoreboard.myScore = parseInt(data.mine)
             Game.scoreboard.opponentScore = parseInt(data.opponents)
             $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
@@ -24,7 +24,7 @@ var SocketHander = {
             console.log("tutaj będzie aktualizacja planszy", data)
         })
         this.addResponseCallback("nickname-update", function (data) {
-            console.log("otrzymano info o nazwach graczy", data)
+            //console.log("otrzymano info o nazwach graczy", data)
             Game.scoreboard.myName = data.mine
             Game.scoreboard.opponentName = data.opponents
             $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
