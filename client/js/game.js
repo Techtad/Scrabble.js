@@ -111,7 +111,7 @@ var Game = {
 
 
         }
-        console.log(this.scene)
+        //console.log(this.scene)
 
 
     },
@@ -123,15 +123,15 @@ var Game = {
         TileGen.color = "white"
         for (var letterCount = 0; letterCount < this.lettersTab.length; letterCount++) {
             var letterTile = new Tile(null, null, this.lettersTab[letterCount], letterCount)
-            //console.log(letterTile)
+            ////console.log(letterTile)
 
             this.letterBlocksTab.push(letterTile)
-            //console.log(this.letterBlocksTab)
+            ////console.log(this.letterBlocksTab)
             //this.scene.add(letterTile)
         }
         for (var letterCount = 0; letterCount < this.letterBlocksTab.length; letterCount++) {
             var letter = new Letter(this.lettersTab[letterCount], letterCount)
-            //console.log(letter)
+            ////console.log(letter)
         }
 
     },
@@ -153,13 +153,13 @@ var Game = {
         //wylosowanie płytki z literą z tablicy i wrzucenie jej graczowi na tackę
         //zautomatyzowane już, ponieważ zawsze musi być maks płytek na tacce, po kliknięciu Start Game to się uruchamia 15 razy.
         var randNum = Math.floor(Math.random() * 26)
-        console.log(this.letterBlocksTab[randNum])
+        //console.log(this.letterBlocksTab[randNum])
         for (var trayCheck = 0; trayCheck < this.trayTab.length; trayCheck++) {
             if (this.trayTab[trayCheck] == "/") {
                 var kloc = this.letterBlocksTab[randNum].clone()
-                console.log(kloc)
+                //console.log(kloc)
                 this.trayTab[trayCheck] = kloc
-                console.log(this.trayTab)
+                //console.log(this.trayTab)
                 kloc.position.set(trayCheck * 10, 4.5, 161.5)
                 kloc.rotation.x = Math.PI / 4
                 this.scene.add(kloc)
@@ -184,12 +184,12 @@ var Game = {
 
         this.intersects = this.raycaster.intersectObjects(this.scene.children, true);
 
-        console.log(this.intersects.length)
-        console.log(this.scene)
+        //console.log(this.intersects.length)
+        //console.log(this.scene)
 
         if (this.intersects.length > 0) {
             var obj = this.intersects[0].object
-            console.log(obj)
+            //console.log(obj)
             if (obj.name.split("_")[0] == "letterBlock") {
                 if (!this.exchange) {
                     this.letterSelect()
@@ -271,7 +271,7 @@ var Game = {
                 this.selectedLetter.color = "white"
                 this.selectedLetter.material = this.selectedLetter.color
                 this.selectedLetter = null
-                console.log(this.trayTab)
+                //console.log(this.trayTab)
             }
         }
     },
@@ -346,7 +346,7 @@ var Game = {
                         if (obj.position.x == this.wordTab[0].position.x) {
                             for (var wordCheck = 0; wordCheck < this.wordTab.length; wordCheck++) {
                                 var neighbor = this.wordTab[wordCheck]
-                                console.log(obj.position.z, neighbor.position.z)
+                                //console.log(obj.position.z, neighbor.position.z)
                                 if (obj.position.z == neighbor.position.z + 10 || obj.position.z == neighbor.position.z - 10) {
                                     isNeighbor = true
                                     break
@@ -360,7 +360,7 @@ var Game = {
                         if (obj.position.z == this.wordTab[0].position.z) {
                             for (var wordCheck = 0; wordCheck < this.wordTab.length; wordCheck++) {
                                 var neighbor = this.wordTab[wordCheck]
-                                console.log(obj.position.x, neighbor.position.x)
+                                //console.log(obj.position.x, neighbor.position.x)
                                 if (obj.position.x == neighbor.position.x + 10 || obj.position.x == neighbor.position.x - 10) {
                                     isNeighbor = true
                                     break
@@ -420,7 +420,7 @@ var Game = {
         var side
         var neighbors = []
         var axis
-        console.log(this.boardTab)
+        //console.log(this.boardTab)
         //sprawdzanie czy są sąsiedzi bo nie może być więcej niż jednego (dodatkowe ify na zapobiegniecie sprawdzaniu poza tablicą)
         if (axisZ != 0) {
             if (this.boardTab[axisZ - 1][axisX] != "/") {
@@ -511,7 +511,7 @@ var Game = {
         //jeśli wszystkie warunki postawienia klocka zostały spełnione, następuje jego postawienie
 
         var obj = this.intersects[0].object
-        console.log(obj)
+        //console.log(obj)
         if (this.selectedLetter != null) {
             var tileX = obj.name.split("_")[1] * 10
             var tileZ = obj.name.split("_")[2] * 10
@@ -522,7 +522,7 @@ var Game = {
             this.selectedLetter.material = this.selectedLetter.color
             this.wordTab.push(this.selectedLetter)
 
-            console.log(this.wordTab)
+            //console.log(this.wordTab)
             this.selectedLetter = null
 
         }
@@ -614,7 +614,7 @@ var Game = {
                 }
             }
 
-            console.log(word)
+            //console.log(word)
         } else {
             var xAxis
             for (var z = 0; z < 15; z++) {
@@ -644,7 +644,7 @@ var Game = {
                     }
                 }
             }
-            console.log(word)
+            //console.log(word)
 
         }
 
@@ -673,7 +673,7 @@ var Game = {
                 Game.isHorizontal = null
                 Game.firstMove = false
                 Game.turnSkipCount = 0
-                console.log(Game.boardTab)
+                //console.log(Game.boardTab)
                 $("#placeWord").prop("disabled", true)
                 $("#wordReset").prop("disabled", true)
                 $("#exchangeMode").prop("disabled", false)
