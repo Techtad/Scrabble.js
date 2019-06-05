@@ -648,45 +648,49 @@ var Game = {
 
         }
 
-        SocketHander.emit("check-word", { word: word })
+        SocketHander.emit("check-word", { word: word }, function (data) {
+            alert(`Słowo '${data.word}' jest ${data.answer ? "poprawne" : "niepoprawne"}!`)
 
-        //zaakceptowanie klocków na planszy
-        for (var countWord = 0; countWord < this.wordTab.length; countWord++) {
-            var obj = this.wordTab[countWord]
-            var tileX = obj.position.x / 10
-            var tileZ = obj.position.z / 10
-            obj.color = "yellow"
-            obj.material = obj.color
-            obj.position.y = 2
-            this.boardTab[tileZ][tileX] = obj
-            for (var countTray = 0; countTray < this.trayTab.length; countTray++) {
-                var trayObj = this.trayTab[countTray]
-                if (trayObj == obj) {
-                    this.trayTab[countTray] = "/"
+            if (data.answer) {
+                //zaakceptowanie klocków na planszy
+                for (var countWord = 0; countWord < Game.wordTab.length; countWord++) {
+                    var obj = Game.wordTab[countWord]
+                    var tileX = obj.position.x / 10
+                    var tileZ = obj.position.z / 10
+                    obj.color = "yellow"
+                    obj.material = obj.color
+                    obj.position.y = 2
+                    Game.boardTab[tileZ][tileX] = obj
+                    for (var countTray = 0; countTray < Game.trayTab.length; countTray++) {
+                        var trayObj = Game.trayTab[countTray]
+                        if (trayObj == obj) {
+                            Game.trayTab[countTray] = "/"
+                        }
+                    }
                 }
-            }
-        }
-        var length = this.wordTab.length
-        this.wordTab = []
-        this.isHorizontal = null
-        this.firstMove = false
-        this.turnSkipCount = 0
-        console.log(this.boardTab)
-        $("#placeWord").prop("disabled", true)
-        $("#wordReset").prop("disabled", true)
-        $("#exchangeMode").prop("disabled", false)
-        $("#skip").prop("disabled", false)
-        Game.scoreboard.score += length
-        $("#scoreboard").html("<h3>" + Game.scoreboard.player + " : " + Game.scoreboard.score + "</h3>")
-        var draw = setInterval(function () {
-            if (length <= 0) {
-                clearInterval(draw)
-            } else {
-                Game.giveLetter()
-                length--
-            }
+                var length = Game.wordTab.length
+                Game.wordTab = []
+                Game.isHorizontal = null
+                Game.firstMove = false
+                Game.turnSkipCount = 0
+                console.log(Game.boardTab)
+                $("#placeWord").prop("disabled", true)
+                $("#wordReset").prop("disabled", true)
+                $("#exchangeMode").prop("disabled", false)
+                $("#skip").prop("disabled", false)
+                Game.scoreboard.score += length
+                $("#scoreboard").html("<h3>" + Game.scoreboard.player + " : " + Game.scoreboard.score + "</h3>")
+                var draw = setInterval(function () {
+                    if (length <= 0) {
+                        clearInterval(draw)
+                    } else {
+                        Game.giveLetter()
+                        length--
+                    }
 
-        }, 100)
+                }, 100)
+            } else Game.resetWord()
+        })
     },
 
     exchangeMode: function () {
