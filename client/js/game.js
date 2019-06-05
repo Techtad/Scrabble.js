@@ -53,9 +53,10 @@ var Game = {
         this.renderer = new THREE.WebGLRenderer({ antialias: true })
         this.renderer.setClearColor(0xeeeeee)
         this.renderer.setSize($(window).width(), $(window).height())
+        this.renderer.shadowMap.enabled = true
 
         this.camera = new THREE.PerspectiveCamera(45, $(window).width() / $(window).height(), 1, 10000)
-        this.camera.position.set(70, 150, 250)
+        this.camera.position.set(75, 150, 250)
         this.camera.lookAt(this.scene.position)
         this.camera.updateProjectionMatrix()
 
@@ -86,21 +87,44 @@ var Game = {
         this.trayCreate()
         this.createRayCaster()
 
-
         //tutaj dodawanie obiektów do sceny
+        let centerTilePos = this.tilesTab[7][7].position.clone()
+        centerTilePos.add(new THREE.Vector3(5, 0, 5))
+
+        this.centerLight = new THREE.SpotLight(0xffffff, 0.56)
+        this.centerLight.castShadow = true
+        this.centerLight.position.set(centerTilePos.x, 100, centerTilePos.z)
+        this.centerLight.target.position.set(centerTilePos.x, centerTilePos.y, centerTilePos.z)
+        this.centerLight.target.updateMatrixWorld()
+        this.scene.add(this.centerLight)
+
+        this.frontLight = new THREE.SpotLight(0xffffff, 0.78)
+        this.frontLight.castShadow = false
+        this.frontLight.position.set(centerTilePos.x, 50, 300)
+        this.frontLight.target.position.set(centerTilePos.x, centerTilePos.y, centerTilePos.z)
+        this.frontLight.target.updateMatrixWorld()
+        this.scene.add(this.frontLight)
+
+        this.backLight = new THREE.SpotLight(0xffffff, 0.78)
+        this.backLight.castShadow = false
+        this.backLight.position.set(centerTilePos.x, 50, -300)
+        this.backLight.target.position.set(centerTilePos.x, centerTilePos.y, centerTilePos.z)
+        this.backLight.target.updateMatrixWorld()
+        this.scene.add(this.backLight)
     },
 
     boardGen: function () {
 
         //generowanie całej planszy
         for (var tileCount_z = 0; tileCount_z < 15; tileCount_z++) {
+            this.tilesTab[tileCount_z] = []
             for (var tileCount_x = 0; tileCount_x < 15; tileCount_x++) {
 
                 if (tileCount_x == 7 && tileCount_z == 7) {
                     TileGen.color = "yellow"
                 }
                 var tile = new Tile(tileCount_x, tileCount_z)
-                this.tilesTab.push(tile)
+                this.tilesTab[tileCount_z][tileCount_x] = tile
                 this.scene.add(tile)
                 if (TileGen.color == "lime") {
                     TileGen.color = "green"

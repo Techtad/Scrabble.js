@@ -23,7 +23,7 @@ Gra:
 9. Każdy dostaje swoje literki
 10. Turowość (bez ograniczeń czasowych chyba bo trzeba dać pomyśleć)
 11. Możliwość wygranej (liczenie punktów za słowa) (win condition albo jak się zdobędzie x punktów, albo jak się skończy miejsce, ale to będzie ciężej zrobić)
-12. Światełko żeby było
+12. Światełko żeby było READY
 13. Inne informacje
 
 Inne:
