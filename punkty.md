@@ -15,6 +15,7 @@ c) w bazie NeDB lub MongoDB są przechowane statyczne informacje o grze (położ
 d) da się wygrać i przegrać czyli skończyć grę [4 pkt] JESZCZE NIE
 
 e) zaimportowany model, modele (mający/e zastosowanie w grze) / było/będzie omówione na zajęciach/ [2 pkt] JESZCZE NIE
+
 f) poprawnie oświetlona scena /omówione na zajęciach/ [2 pkt] JESZCZE NIE
 
 g) dynamiczny help dla gracza w trakcie gry (decyzje, podpowiedzi, stan gry, kierunek dalszej gry) [2 pkt] NIE DO KOŃCA 1/2
