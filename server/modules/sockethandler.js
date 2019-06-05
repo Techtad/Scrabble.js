@@ -25,8 +25,16 @@ module.exports = function (SocketServer) { //SocketHandler
             if (!Session) return
             let Game = Session.getGame()
 
-            if (client.id == Session.clientA.id) Game.setScoreA(data.score)
-            else if (client.id == Session.clientB.id) Game.setScoreB(data.score)
+            if (client.id == Session.clientA.id) {
+                Game.setScoreA(data.score)
+                let scores = Game.getScores()
+                Session.clientB.emit("score-update-resp", { mine: scores.b, opponents: scores.a })
+            }
+            else if (Session.clientB && client.id == Session.clientB.id) {
+                Game.setScoreB(data.score)
+                let scores = Game.getScores()
+                Session.clientA.emit("score-update-resp", { mine: scores.a, opponents: scores.b })
+            }
 
             client.emit("send-score-resp", { success: true })
         })
@@ -37,7 +45,28 @@ module.exports = function (SocketServer) { //SocketHandler
 
             let scores = Game.getScores()
             if (client.id == Session.clientA.id) client.emit("get-scores-resp", { mine: scores.a, opponents: scores.b })
-            else if (client.id == Session.clientB.id) client.emit("get-scores-resp", { mine: scores.b, opponents: scores.a })
+            else if (Session.clientB && client.id == Session.clientB.id) client.emit("get-scores-resp", { mine: scores.b, opponents: scores.a })
+        })
+
+        client.on("send-board", function (data) {
+            let Session = SessionManager.getSessionByClientId(client.id)
+            if (!Session) return
+            let Game = Session.getGame()
+
+            if (data.board) {
+                Game.setBoard(data.board)
+                client.emit("send-board-resp", { success: true })
+                if (client.id == Session.clientA.id) Session.clientB.emit("board-update-resp", { board: Game.getBoard() })
+                else if (Session.clientB && client.id == Session.clientB.id) Session.clientA.emit("board-update-resp", { board: Game.getBoard() })
+            } else
+                client.emit("send-board-resp", { success: false })
+        })
+        client.on("get-board", function (data) {
+            let Session = SessionManager.getSessionByClientId(client.id)
+            if (!Session) return
+            let Game = Session.getGame()
+
+            client.emit("get-board-resp", { board: Game.getBoard() })
         })
     })
 

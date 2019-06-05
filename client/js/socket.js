@@ -1,10 +1,19 @@
-var EventList = ["check-word", "session-joined", "session-closed", "send-score", "get-scores"]
+var EventList = ["check-word",
+    "session-joined", "session-closed",
+    "send-score", "get-scores", "score-update",
+    "send-board", "get-board", "board-update"]
 
 var SocketHander = {
     client: null,
     init: function (socket) {
         this.client = socket
         this.responseHandlers()
+        this.addResponseCallback("score-update", function (data) {
+            console.log("tutaj będzie wyświetlanie zaktualizowanych wyników", data)
+        })
+        this.addResponseCallback("board-update", function (data) {
+            console.log("tutaj będzie aktualizacja planszy", data)
+        })
     },
 
     callbacks: [],
