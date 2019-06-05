@@ -17,7 +17,8 @@ Gra:
 5. Interfejs - zatwierdzanie itp. - READY
 6. Mechanizm sprawdzania i zatwierdzania - READY
     - może być jedno słowo tworzone naraz
-7. Porównywanie słów z bazą
+7. Porównywanie słów z bazą READY
+8. Sprawdzanie po stronie serwera czy gracz ma te litery, które wysyła(anti-cheat).
 8. Podłączenie drugiego gracza
 9. Każdy dostaje swoje literki
 10. Turowość (bez ograniczeń czasowych chyba bo trzeba dać pomyśleć)
