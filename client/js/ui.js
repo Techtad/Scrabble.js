@@ -9,13 +9,11 @@ var Ui = {
                     Game.giveLetter()
                     count--
                 }
-
             }, 100)
             $("#letterGet").prop("disabled", true)
             $("#exchangeMode").prop("disabled", false)
             $("#skip").prop("disabled", false)
-            $("#scoreboard").html("<h3>" + Game.scoreboard.player + " : " + Game.scoreboard.score + "</h3>")
-
+            $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
         })
 
         $("#exchangeMode").on("click", function () {

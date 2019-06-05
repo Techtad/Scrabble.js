@@ -7,8 +7,10 @@ var Game = {
         this.turnSkipCount = 0
 
         this.scoreboard = {
-            player: "player",
-            score: 0
+            myName: "",
+            myScore: 0,
+            opponentName: "",
+            opponentScore: 0,
         }
 
         this.boardTab = [
@@ -702,8 +704,9 @@ var Game = {
                 $("#wordReset").prop("disabled", true)
                 $("#exchangeMode").prop("disabled", false)
                 $("#skip").prop("disabled", false)
-                Game.scoreboard.score += length
-                $("#scoreboard").html("<h3>" + Game.scoreboard.player + " : " + Game.scoreboard.score + "</h3>")
+                Game.scoreboard.myScore += length
+                SocketHander.emit("send-score", { score: Game.scoreboard.myScore })
+                $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
                 var draw = setInterval(function () {
                     if (length <= 0) {
                         clearInterval(draw)
