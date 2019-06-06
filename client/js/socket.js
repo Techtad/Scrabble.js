@@ -2,7 +2,8 @@ var EventList = ["check-word",
     "session-joined", "session-closed",
     "send-score", "get-scores", "score-update",
     "send-board", "get-board", "board-update",
-    "send-nickname", "get-nicknames", "nickname-update"]
+    "send-nickname", "get-nicknames", "nickname-update",
+    "whose-turn", "end-turn", "turn-update"]
 
 var SocketHander = {
     client: null,
@@ -28,6 +29,10 @@ var SocketHander = {
             Game.scoreboard.myName = data.mine
             Game.scoreboard.opponentName = data.opponents
             $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
+        })
+        this.addResponseCallback("turn-update", function (data) {
+            if (data.myTurn) console.log("teraz moja tura")
+            else console.log("już nie moja tura")
         })
 
         this.addResponseCallback("send-nickname", function (data) {

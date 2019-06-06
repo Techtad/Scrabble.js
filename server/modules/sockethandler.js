@@ -104,6 +104,41 @@ module.exports = function (SocketServer) { //SocketHandler
             if (client.id == Session.clientA.id) client.emit("get-nicknames-resp", { mine: nicknames.a, opponents: nicknames.b })
             else if (Session.clientB && client.id == Session.clientB.id) client.emit("get-nicknames-resp", { mine: nicknames.b, opponents: nicknames.a })
         })
+
+        client.on("whose-turn", function (data) {
+            let Session = SessionManager.getSessionByClientId(client.id)
+            if (!Session) return
+            let Game = Session.getGame()
+
+            if (client.id == Session.clientA.id) client.emit("whose-turn-resp", { myTurn: Game.playerATurn() })
+            else if (Session.clientB && client.id == Session.clientB.id) client.emit("whose-turn-resp", { myTurn: Game.playerBTurn() })
+        })
+        client.on("end-turn", function (data) {
+            let Session = SessionManager.getSessionByClientId(client.id)
+            if (!Session) return
+            let Game = Session.getGame()
+
+            if (client.id == Session.clientA.id) {
+                if (Game.playerATurn()) {
+                    Game.nextTurn()
+                    client.emit("end-turn-resp", { success: true })
+
+                    Session.clientA.emit("turn-update-resp", { myTurn: Game.playerATurn() })
+                    if (Session.clientB) Session.clientB.emit("turn-update-resp", { myTurn: Game.playerBTurn() })
+                }
+                else client.emit("end-turn-resp", { success: false })
+            }
+            else if (Session.clientB && client.id == Session.clientB.id) {
+                if (Game.playerBTurn()) {
+                    Game.nextTurn()
+                    client.emit("end-turn-resp", { success: true })
+
+                    if (Session.clientA) Session.clientA.emit("turn-update-resp", { myTurn: Game.playerATurn() })
+                    Session.clientB.emit("turn-update-resp", { myTurn: Game.playerBTurn() })
+                }
+                else client.emit("end-turn-resp", { success: false })
+            }
+        })
     })
 
     //dodatkowe funkcje

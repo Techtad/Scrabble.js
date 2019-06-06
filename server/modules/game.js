@@ -5,6 +5,7 @@ class ScrabbleGame {
         this.board = []
         this.nicknameA = ""
         this.nicknameB = ""
+        this.turnA = true
     }
 
     setScoreA(score) {
@@ -37,6 +38,26 @@ class ScrabbleGame {
 
     getNicknames() {
         return { a: this.nicknameA, b: this.nicknameB }
+    }
+
+    playerATurn() {
+        return this.turnA
+    }
+
+    playerBTurn() {
+        return !this.turnA
+    }
+
+    nextTurn() {
+        this.turnA = !this.turnA
+    }
+
+    setTurnA() {
+        this.turnA = true
+    }
+
+    setTurnB() {
+        this.turnA = false
     }
 }
 
