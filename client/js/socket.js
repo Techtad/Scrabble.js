@@ -22,7 +22,8 @@ var SocketHander = {
             $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
         })
         this.addResponseCallback("board-update", function (data) {
-            console.log("tutaj będzie aktualizacja planszy", data)
+            //console.log("tutaj będzie aktualizacja planszy", data)
+            Game.updateBoard(data.board)
         })
         this.addResponseCallback("nickname-update", function (data) {
             //console.log("otrzymano info o nazwach graczy", data)

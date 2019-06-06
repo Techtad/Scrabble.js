@@ -31,6 +31,24 @@ var Game = {
             ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
         ]
 
+        this.boardLetters = [
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+        ]
+
         this.lettersTab = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
         this.letterBlocksTab = []
 
@@ -43,8 +61,6 @@ var Game = {
         this.isHorizontal = null
 
         this.firstMove = true
-
-        this.centerTaken = false
 
         this.exchange = false
 
@@ -548,6 +564,8 @@ var Game = {
             this.selectedLetter.material = this.selectedLetter.color
             this.wordTab.push(this.selectedLetter)
 
+            this.boardLetters[tileZ / 10][tileX / 10] = this.selectedLetter.name.substr(12)
+
             //console.log(this.wordTab)
             this.selectedLetter = null
 
@@ -560,13 +578,15 @@ var Game = {
     },
 
     resetWord: function () {
-
         //cofnięcie wszystkich klocków na tray na miejsca wdg tablicy
         var obj
         for (var countWord = 0; countWord < this.wordTab.length; countWord++) {
             for (var countTray = 0; countTray < this.trayTab.length; countTray++) {
                 if (this.wordTab[countWord] == this.trayTab[countTray]) {
                     obj = this.wordTab[countWord]
+
+                    this.boardLetters[obj.position.z / 10][obj.position.x / 10] = "/"
+
                     obj.position.x = countTray * 10
                     obj.position.z = 161.5
                     obj.rotation.x = Math.PI / 4
@@ -593,15 +613,13 @@ var Game = {
         $("#skip").prop("disabled", false)
     },
 
-    centerCheck: function () {
+    centerTaken: function () {
         //sprawdzenie czy został zajęty środkowy klocek (tylko przy pierwszym słowie)
-        for (var count = 0; count < this.wordTab.length; count++) {
-            if (this.wordTab[count].position.x == 70 && this.wordTab[count].position.z == 70) {
-                this.centerTaken = true
-                break
-            }
-        }
-        if (this.centerTaken) {
+        return this.lettersTab.includes(this.boardLetters[7][7])
+    },
+
+    centerCheck: function () {
+        if (this.centerTaken()) {
             this.acceptWord()
         } else {
             alert("You have to place any block on the yellow square")
@@ -705,8 +723,11 @@ var Game = {
                 $("#exchangeMode").prop("disabled", false)
                 $("#skip").prop("disabled", false)
                 Game.scoreboard.myScore += length
+
                 SocketHander.emit("send-score", { score: Game.scoreboard.myScore })
                 $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
+
+                SocketHander.emit("send-board", { board: Game.boardLetters })
                 var draw = setInterval(function () {
                     if (length <= 0) {
                         clearInterval(draw)
@@ -764,6 +785,39 @@ var Game = {
         }, 100)
         this.exchangeTab = []
         this.turnSkipCount = 0
+    },
+
+    updateBoardLetters() {
+        for (let x in this.boardTab) {
+            let row = this.boardTab[x]
+            for (let y in row) {
+                let obj = row[y]
+                if (y != "/") {
+                    this.scene.remove(obj)
+                    this.boardTab[x][y] = "/"
+                }
+            }
+        }
+
+        for (let z in this.boardLetters) {
+            let row = this.boardLetters[z]
+            for (let x in row) {
+                let letter = row[x]
+                if (this.lettersTab.includes(letter)) {
+                    let block = this.letterBlocksTab[this.lettersTab.indexOf(letter)].clone()
+                    block.position.set(x * 10, 2.5, z * 10)
+                    block.color = "yellow"
+                    block.material = block.color
+                    this.boardTab[x][z] = block
+                    this.scene.add(block)
+                }
+            }
+        }
+    },
+
+    updateBoard(tab) {
+        this.boardLetters = tab
+        this.updateBoardLetters()
     },
 
     start: function () {
