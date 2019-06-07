@@ -805,7 +805,7 @@ var Game = {
                 let letter = row[x]
                 if (this.lettersTab.includes(letter)) {
                     let block = this.letterBlocksTab[this.lettersTab.indexOf(letter)].clone()
-                    block.position.set(x * 10, 2.5, z * 10)
+                    block.position.set(x * 10, 2, z * 10)
                     block.color = "yellow"
                     block.material = block.color
                     this.boardTab[x][z] = block
