@@ -49,6 +49,11 @@ button[disabled] {
     height: 50px;
 }
 
+#turnStatus {
+    padding-top: 20px;
+    text-align: center;
+}
+
 #placeWord {
     position: absolute;
     top: 90px;
