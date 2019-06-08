@@ -62,7 +62,7 @@ var Game = {
 
         this.isHorizontal = null
 
-        this.firstMove = true
+        this.firstMove = null
 
         this.exchange = false
 
@@ -821,7 +821,7 @@ var Game = {
                     block.position.set(x * 10, 2, z * 10)
                     block.color = "yellow"
                     block.material = block.color
-                    this.boardTab[x][z] = block
+                    this.boardTab[z][x] = block
                     this.scene.add(block)
                 }
             }

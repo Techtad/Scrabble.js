@@ -16,11 +16,11 @@ var SocketHander = {
         this.addResponseCallback("session-joined", function(data) {
             if (data.myTurn) {
                 Game.myTurn = true
-
+                Game.firstMove = true
                 console.log("teraz moja tura")
             } else {
                 Game.myTurn = false
-
+                Game.firstMove = false
                 console.log("już nie moja tura")
             }
 
