@@ -1,8 +1,8 @@
 var Ui = {
-    clicks: function() {
-        $("#letterGet").on("click", function() {
+    clicks: function () {
+        $("#letterGet").on("click", function () {
             var count = 15
-            var start = setInterval(function() {
+            var start = setInterval(function () {
                 if (count <= 0) {
                     clearInterval(start)
                 } else {
@@ -16,7 +16,7 @@ var Ui = {
             $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
         })
 
-        $("#exchangeMode").on("click", function() {
+        $("#exchangeMode").on("click", function () {
             if (!Game.exchange) {
                 $(this).text("CANCEL REDRAWING")
                 $("#exchange").prop("disabled", false)
@@ -41,15 +41,15 @@ var Ui = {
             }
         })
 
-        $("#exchange").on("click", function() {
+        $("#exchange").on("click", function () {
             Game.exchangeLetters()
         })
 
-        $("#wordReset").on("click", function() {
+        $("#wordReset").on("click", function () {
             Game.resetWord()
         })
 
-        $("#placeWord").on("click", function() {
+        $("#placeWord").on("click", function () {
             if (Game.firstMove) {
                 Game.centerCheck()
             } else {
@@ -57,8 +57,8 @@ var Ui = {
             }
         })
 
-        $("#skip").on("click", function() {
-            SocketHander.emit("end-turn", null, function(data) {
+        $("#skip").on("click", function () {
+            SocketHander.emit("end-turn", null, function (data) {
                 if (data.success) {
                     Game.turnSkipCount += 1
                     if (Game.turnSkipCount >= 2) {
@@ -75,7 +75,7 @@ var Ui = {
 
         })
 
-        $("#root").on("click", function() {
+        $("#root").on("click", function () {
             Game.rayClick()
         })
     }

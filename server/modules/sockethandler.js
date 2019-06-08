@@ -94,6 +94,12 @@ module.exports = function (SocketServer) { //SocketHandler
                     Session.clientB.emit("nickname-update-resp", { mine: nicknames.b, opponents: nicknames.a })
                 }
             }
+
+            let names = Game.getNicknames()
+            if (names.a && names.a.length > 0 && names.b && names.b.length > 0) {
+                Session.clientA.emit("start-game-resp")
+                Session.clientB.emit("start-game-resp")
+            }
         })
         client.on("get-nicknames", function (data) {
             let Session = SessionManager.getSessionByClientId(client.id)
