@@ -696,47 +696,53 @@ var Game = {
             alert(`Słowo '${data.word}' jest ${data.answer ? "poprawne" : "niepoprawne"}!`)
 
             if (data.answer) {
-                //zaakceptowanie klocków na planszy
-                for (var countWord = 0; countWord < Game.wordTab.length; countWord++) {
-                    var obj = Game.wordTab[countWord]
-                    var tileX = obj.position.x / 10
-                    var tileZ = obj.position.z / 10
-                    obj.color = "yellow"
-                    obj.material = obj.color
-                    obj.position.y = 2
-                    Game.boardTab[tileZ][tileX] = obj
-                    for (var countTray = 0; countTray < Game.trayTab.length; countTray++) {
-                        var trayObj = Game.trayTab[countTray]
-                        if (trayObj == obj) {
-                            Game.trayTab[countTray] = "/"
+                SocketHander.emit("end-turn", null, function (data) {
+                    if (!data.success) {
+                        alert("ERROR: Not my turn")
+                        return
+                    }
+                    //zaakceptowanie klocków na planszy
+                    for (var countWord = 0; countWord < Game.wordTab.length; countWord++) {
+                        var obj = Game.wordTab[countWord]
+                        var tileX = obj.position.x / 10
+                        var tileZ = obj.position.z / 10
+                        obj.color = "yellow"
+                        obj.material = obj.color
+                        obj.position.y = 2
+                        Game.boardTab[tileZ][tileX] = obj
+                        for (var countTray = 0; countTray < Game.trayTab.length; countTray++) {
+                            var trayObj = Game.trayTab[countTray]
+                            if (trayObj == obj) {
+                                Game.trayTab[countTray] = "/"
+                            }
                         }
                     }
-                }
-                var length = Game.wordTab.length
-                Game.wordTab = []
-                Game.isHorizontal = null
-                Game.firstMove = false
-                Game.turnSkipCount = 0
-                //console.log(Game.boardTab)
-                $("#placeWord").prop("disabled", true)
-                $("#wordReset").prop("disabled", true)
-                $("#exchangeMode").prop("disabled", false)
-                $("#skip").prop("disabled", false)
-                Game.scoreboard.myScore += length
+                    var length = Game.wordTab.length
+                    Game.wordTab = []
+                    Game.isHorizontal = null
+                    Game.firstMove = false
+                    Game.turnSkipCount = 0
+                    //console.log(Game.boardTab)
+                    $("#placeWord").prop("disabled", true)
+                    $("#wordReset").prop("disabled", true)
+                    $("#exchangeMode").prop("disabled", false)
+                    $("#skip").prop("disabled", false)
+                    Game.scoreboard.myScore += length
 
-                SocketHander.emit("send-score", { score: Game.scoreboard.myScore })
-                $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
+                    SocketHander.emit("send-score", { score: Game.scoreboard.myScore })
+                    $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
 
-                SocketHander.emit("send-board", { board: Game.boardLetters })
-                var draw = setInterval(function () {
-                    if (length <= 0) {
-                        clearInterval(draw)
-                    } else {
-                        Game.giveLetter()
-                        length--
-                    }
+                    SocketHander.emit("send-board", { board: Game.boardLetters })
+                    var draw = setInterval(function () {
+                        if (length <= 0) {
+                            clearInterval(draw)
+                        } else {
+                            Game.giveLetter()
+                            length--
+                        }
 
-                }, 100)
+                    }, 100)
+                })
             } else Game.resetWord()
         })
     },

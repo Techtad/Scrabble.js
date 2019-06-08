@@ -58,16 +58,21 @@ var Ui = {
         })
 
         $("#skip").on("click", function () {
-            Game.turnSkipCount += 1
-            if (Game.turnSkipCount >= 2) {
-                alert("Round was skipped twice! Game over!")
-                $("#letterGet").prop("disabled", true)
-                $("#placeWord").prop("disabled", true)
-                $("#wordReset").prop("disabled", true)
-                $("#exchangeMode").prop("disabled", true)
-                $("#exchange").prop("disabled", true)
-                $("#skip").prop("disabled", true)
-            }
+            SocketHander.emit("end-turn", null, function (data) {
+                if (data.success) {
+                    Game.turnSkipCount += 1
+                    if (Game.turnSkipCount >= 2) {
+                        alert("Round was skipped twice! Game over!")
+                        $("#letterGet").prop("disabled", true)
+                        $("#placeWord").prop("disabled", true)
+                        $("#wordReset").prop("disabled", true)
+                        $("#exchangeMode").prop("disabled", true)
+                        $("#exchange").prop("disabled", true)
+                        $("#skip").prop("disabled", true)
+                    }
+                } else alert("You can't skip the turn when it's not your turn!")
+            })
+
         })
 
         $("#root").on("click", function () {
