@@ -11,6 +11,10 @@ var SocketHander = {
         this.client = socket
         this.responseHandlers()
 
+        this.addResponseCallback("session-joined", function (data) {
+            if (data.myTurn) console.log("teraz moja tura")
+            else console.log("już nie moja tura")
+        })
         this.addResponseCallback("session-closed", function (data) {
             alert(`Session closed, reason: ${data.reason}`)
         })
