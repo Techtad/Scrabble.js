@@ -71,7 +71,7 @@ var Game = {
         this.scene = new THREE.Scene()
 
         this.renderer = new THREE.WebGLRenderer({ antialias: true })
-        this.renderer.setClearColor(0xeeeeee)
+        this.renderer.setClearColor(0x003300)
         this.renderer.setSize($(window).width(), $(window).height())
         this.renderer.shadowMap.enabled = true
 
