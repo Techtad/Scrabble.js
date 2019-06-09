@@ -27,4 +27,4 @@ Gra:
 13. Inne informacje
 
 Inne:
-1. Dokumentacja
+1. Dokumentacja READY
