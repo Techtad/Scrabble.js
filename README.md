@@ -19,10 +19,10 @@ Gra:
     - może być jedno słowo tworzone naraz
 7. Porównywanie słów z bazą READY
 8. Sprawdzanie po stronie serwera czy gracz ma te litery, które wysyła(anti-cheat).
-8. Podłączenie drugiego gracza
-9. Każdy dostaje swoje literki
-10. Turowość (bez ograniczeń czasowych chyba bo trzeba dać pomyśleć)
-11. Możliwość wygranej (liczenie punktów za słowa) (win condition albo jak się zdobędzie x punktów, albo jak się skończy miejsce, ale to będzie ciężej zrobić)
+8. Podłączenie drugiego gracza READY
+9. Każdy dostaje swoje literki READY
+10. Turowość (bez ograniczeń czasowych chyba bo trzeba dać pomyśleć) READY
+11. Możliwość wygranej (liczenie punktów za słowa) READY
 12. Światełko żeby było READY
 13. Inne informacje
 
