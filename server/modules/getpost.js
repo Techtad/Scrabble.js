@@ -3,7 +3,7 @@ var FilesDir = "client"
 
 module.exports = { //RequestHandler
     sendFile: function (__dirname, fileName, res) {
-        if (fileName == "/") fileName = "/index.html"
+        if (fileName == "/") fileName = "/lobby.html"
         fs.readFile(`${__dirname}/${FilesDir}/${fileName}`, function (error, data) {
             if (error) {
                 console.log(error)
