@@ -8,45 +8,45 @@ var EventList = ["check-word",
 ]
 
 var SocketHander = {
-        client: null,
-        init: function(socket) {
-                this.client = socket
-                this.responseHandlers()
+    client: null,
+    init: function (socket) {
+        this.client = socket
+        this.responseHandlers()
 
-                this.addResponseCallback("session-joined", function(data) {
-                    if (data.myTurn) {
-                        Game.myTurn = true
-                            //Game.firstMove = true
-                        console.log("teraz moja tura")
-                    } else {
-                        Game.myTurn = false
-                            //Game.firstMove = false
-                        console.log("już nie moja tura")
-                    }
-                })
-                this.addResponseCallback("session-closed", function(data) {
-                    Game.myTurn = false
-                    Ui.blockEverything()
-                    $("#turnStatus").text(`SESSION CLOSED!`)
-                    $("#turnStatus").css("color", "black")
-                    alert(`Session closed, reason: ${data.reason}`)
-                })
+        this.addResponseCallback("session-joined", function (data) {
+            if (data.myTurn) {
+                Game.myTurn = true
+                //Game.firstMove = true
+                console.log("teraz moja tura")
+            } else {
+                Game.myTurn = false
+                //Game.firstMove = false
+                console.log("już nie moja tura")
+            }
+        })
+        this.addResponseCallback("session-closed", function (data) {
+            Game.myTurn = false
+            Ui.blockEverything()
+            $("#turnStatus").text(`SESSION CLOSED!`)
+            $("#turnStatus").css("color", "black")
+            alert(`Session closed, reason: ${data.reason}`)
+        })
 
-                this.addResponseCallback("start-game", function(data) {
-                    var count = 15
-                    var start = setInterval(function() {
-                            if (count <= 0) {
-                                clearInterval(start)
-                            } else {
-                                Game.giveLetter()
-                                count--
-                            }
-                        }, 100)
-                        // $("#letterGet").click()
-                })
-                this.addResponseCallback("game-over", function(data) {
-                            Ui.blockEverything()
-                            let msg = `Game over! ${data.draw ? "It's a draw!" : `${data.winner} won!`}`
+        this.addResponseCallback("start-game", function (data) {
+            var count = 15
+            var start = setInterval(function () {
+                if (count <= 0) {
+                    clearInterval(start)
+                } else {
+                    Game.giveLetter()
+                    count--
+                }
+            }, 100)
+            // $("#letterGet").click()
+        })
+        this.addResponseCallback("game-over", function (data) {
+            Ui.blockEverything()
+            let msg = `Game over! ${data.draw ? "It's a draw!" : `${data.winner} won!`}`
             $("#turnStatus").text(msg.toUpperCase())
             $("#turnStatus").css("color", "darkblue")
             alert(msg)
@@ -57,7 +57,7 @@ var SocketHander = {
             Game.scoreboard.myScore = parseInt(data.mine)
             Game.scoreboard.opponentScore = parseInt(data.opponents)
 
-            $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
+            $("#scoreboard-content").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
         })
         this.addResponseCallback("board-update", function (data) {
             //console.log("tutaj będzie aktualizacja planszy", data)
@@ -68,7 +68,7 @@ var SocketHander = {
             if (data.mine != "") Game.scoreboard.myName = data.mine
             if (data.opponents != "") Game.scoreboard.opponentName = data.opponents
 
-            $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
+            $("#scoreboard-content").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
 
             if (data.opponents != "") {
                 if (Game.myTurn) {

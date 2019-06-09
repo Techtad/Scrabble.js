@@ -13,7 +13,7 @@ var Ui = {
             $("#letterGet").prop("disabled", true)
             $("#exchangeMode").prop("disabled", false)
             $("#skip").prop("disabled", false)
-            $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
+            $("#scoreboard-content").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
         })
 
         $("#exchangeMode").on("click", function () {

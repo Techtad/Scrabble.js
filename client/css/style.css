@@ -23,10 +23,14 @@ canvas {
     z-index: 1;
     right: 0;
     width: 224px;
-    height: 220px;
+    height: 110px;
     border: 2px orange outset;
     background: yellow;
     border-radius: 5px;
+}
+
+#scoreboard-content {
+    margin-top: 12px;
 }
 
 button {
@@ -36,8 +40,7 @@ button {
     border-radius: 5px;
 }
 
-button:disabled,
-button[disabled] {
+button:disabled, button[disabled] {
     background: black;
 }
 
