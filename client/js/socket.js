@@ -30,6 +30,7 @@ var SocketHander = {
             $("#turnStatus").text(`SESSION CLOSED!`)
             $("#turnStatus").css("color", "black")
             alert(`Session closed, reason: ${data.reason}`)
+            PageUtils.redirect("/")
         })
 
         this.addResponseCallback("start-game", function (data) {
@@ -50,6 +51,7 @@ var SocketHander = {
             $("#turnStatus").text(msg.toUpperCase())
             $("#turnStatus").css("color", "darkblue")
             alert(msg)
+            PageUtils.redirect("/")
         })
 
         this.addResponseCallback("score-update", function (data) {

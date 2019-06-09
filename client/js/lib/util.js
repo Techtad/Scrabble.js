@@ -8,5 +8,28 @@ var PageUtils = {
         }
 
         return urlParams[name]
+    },
+
+    redirect: function (url) {
+        window.location = url
+    },
+
+    setCookie: function (name, value) {
+        let date = new Date()
+        date.setTime(date.getTime() + 172800000)
+        document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`
+    },
+
+    getCookie: function (cookieName) {
+        let decodedCookie = decodeURI(document.cookie)
+        let entries = decodedCookie.split("; ")
+        for (let entry of entries) {
+            let pair = entry.split("=")
+            let name = pair[0]
+            let value = pair[1]
+            if (name == cookieName)
+                return value
+        }
+        return null
     }
 }
