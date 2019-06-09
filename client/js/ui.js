@@ -91,5 +91,15 @@ var Ui = {
         $("#exchangeMode").prop("disabled", true)
         $("#exchange").prop("disabled", true)
         $("#skip").prop("disabled", true)
+    },
+
+    setOverlay: function (msg) {
+        $("#overlayMessage").text(msg)
+        $("#overlay").css("display", "block")
+    },
+
+    removeOverlay: function () {
+        $("#overlayMessage").empty() //tak tylko na wszelki wypadek
+        $("#overlay").css("display", "none")
     }
 }

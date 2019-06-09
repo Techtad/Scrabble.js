@@ -4,6 +4,8 @@ class Table {
         var mtlLoader = new THREE.MTLLoader()
         mtlLoader.setResourcePath("model/")
         mtlLoader.setPath("model/")
+
+        Ui.setOverlay("LOADING MODELS...")
         mtlLoader.load("wooden-coffe-table.mtl", function (materials) {
             materials.preload()
 
@@ -15,6 +17,8 @@ class Table {
                 obj.position.set(70, -144, 70)
                 console.log(obj)
                 Game.scene.add(obj)
+
+                Ui.removeOverlay()
             })
 
         })

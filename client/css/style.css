@@ -102,3 +102,19 @@ h3 {
     color: darkorange;
     text-align: center;
 }
+
+#overlay {
+    z-index: 99;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    display: none;
+}
+
+#overlayMessage {
+    position: absolute;
+    left: 45%;
+    top: 45%;
+    color: white;
+}
