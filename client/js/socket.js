@@ -23,9 +23,9 @@ var SocketHander = {
                 Game.firstMove = false
                 console.log("już nie moja tura")
             }
-
         })
         this.addResponseCallback("session-closed", function (data) {
+            Game.myTurn = false
             Ui.blockEverything()
             $("#turnStatus").text(`SESSION CLOSED!`)
             $("#turnStatus").css("color", "black")
@@ -46,7 +46,10 @@ var SocketHander = {
         })
         this.addResponseCallback("game-over", function (data) {
             Ui.blockEverything()
-            alert(`Game over! ${data.draw ? "It's a draw!" : `${data.winner} won!`}`)
+            let msg = `Game over! ${data.draw ? "It's a draw!" : `${data.winner} won!`}`
+            $("#turnStatus").text(msg.toUpperCase())
+            $("#turnStatus").css("color", "darkblue")
+            alert(msg)
         })
 
         this.addResponseCallback("score-update", function (data) {
@@ -62,9 +65,11 @@ var SocketHander = {
         })
         this.addResponseCallback("nickname-update", function (data) {
             //console.log("otrzymano info o nazwach graczy", data)
-            Game.scoreboard.myName = data.mine
-            Game.scoreboard.opponentName = data.opponents
+            if (data.mine != "") Game.scoreboard.myName = data.mine
+            if (data.opponents != "") Game.scoreboard.opponentName = data.opponents
+
             $("#scoreboard").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
+
             if (data.opponents != "") {
                 if (Game.myTurn) {
                     $("#exchangeMode").prop("disabled", false)
@@ -74,7 +79,7 @@ var SocketHander = {
                 } else {
                     $("#exchangeMode").prop("disabled", true)
                     $("#skip").prop("disabled", true)
-                    $("#turnStatus").text(`${Game.scoreboard.opponentName}'S TURN`)
+                    $("#turnStatus").text(`${Game.scoreboard.opponentName.toUpperCase()}'S TURN`)
                     $("#turnStatus").css("color", "red")
                 }
             }
@@ -91,7 +96,7 @@ var SocketHander = {
                 Game.myTurn = false
                 $("#exchangeMode").prop("disabled", true)
                 $("#skip").prop("disabled", true)
-                $("#turnStatus").text(`${Game.scoreboard.opponentName}'S TURN`)
+                $("#turnStatus").text(`${Game.scoreboard.opponentName.toUpperCase()}'S TURN`)
                 $("#turnStatus").css("color", "red")
             }
         })
