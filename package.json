@@ -1,0 +1,31 @@
+{
+  "name": "scrabble",
+  "version": "1.0.0",
+  "description": "Projekt końcowy.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Techtad/scrabble.git"
+  },
+  "keywords": [
+    "scrabble",
+    "game",
+    "js"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Techtad/scrabble/issues"
+  },
+  "homepage": "https://github.com/Techtad/scrabble#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "nedb": "^1.8.0",
+    "socket.io": "^2.2.0"
+  }
+}
