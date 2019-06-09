@@ -8,45 +8,45 @@ var EventList = ["check-word",
 ]
 
 var SocketHander = {
-    client: null,
-    init: function (socket) {
-        this.client = socket
-        this.responseHandlers()
+        client: null,
+        init: function(socket) {
+                this.client = socket
+                this.responseHandlers()
 
-        this.addResponseCallback("session-joined", function (data) {
-            if (data.myTurn) {
-                Game.myTurn = true
-                Game.firstMove = true
-                console.log("teraz moja tura")
-            } else {
-                Game.myTurn = false
-                Game.firstMove = false
-                console.log("już nie moja tura")
-            }
-        })
-        this.addResponseCallback("session-closed", function (data) {
-            Game.myTurn = false
-            Ui.blockEverything()
-            $("#turnStatus").text(`SESSION CLOSED!`)
-            $("#turnStatus").css("color", "black")
-            alert(`Session closed, reason: ${data.reason}`)
-        })
+                this.addResponseCallback("session-joined", function(data) {
+                    if (data.myTurn) {
+                        Game.myTurn = true
+                            //Game.firstMove = true
+                        console.log("teraz moja tura")
+                    } else {
+                        Game.myTurn = false
+                            //Game.firstMove = false
+                        console.log("już nie moja tura")
+                    }
+                })
+                this.addResponseCallback("session-closed", function(data) {
+                    Game.myTurn = false
+                    Ui.blockEverything()
+                    $("#turnStatus").text(`SESSION CLOSED!`)
+                    $("#turnStatus").css("color", "black")
+                    alert(`Session closed, reason: ${data.reason}`)
+                })
 
-        this.addResponseCallback("start-game", function (data) {
-            var count = 15
-            var start = setInterval(function () {
-                if (count <= 0) {
-                    clearInterval(start)
-                } else {
-                    Game.giveLetter()
-                    count--
-                }
-            }, 100)
-            // $("#letterGet").click()
-        })
-        this.addResponseCallback("game-over", function (data) {
-            Ui.blockEverything()
-            let msg = `Game over! ${data.draw ? "It's a draw!" : `${data.winner} won!`}`
+                this.addResponseCallback("start-game", function(data) {
+                    var count = 15
+                    var start = setInterval(function() {
+                            if (count <= 0) {
+                                clearInterval(start)
+                            } else {
+                                Game.giveLetter()
+                                count--
+                            }
+                        }, 100)
+                        // $("#letterGet").click()
+                })
+                this.addResponseCallback("game-over", function(data) {
+                            Ui.blockEverything()
+                            let msg = `Game over! ${data.draw ? "It's a draw!" : `${data.winner} won!`}`
             $("#turnStatus").text(msg.toUpperCase())
             $("#turnStatus").css("color", "darkblue")
             alert(msg)
@@ -92,12 +92,19 @@ var SocketHander = {
                 $("#turnStatus").text("YOUR TURN")
                 $("#turnStatus").css("color", "green")
                 console.log("teraz moja tura")
+                if (data.centerTaken) Game.firstMove = false
+                console.log(data.centerTaken)
+                console.log(Game.firstMove)
             } else {
                 Game.myTurn = false
                 $("#exchangeMode").prop("disabled", true)
                 $("#skip").prop("disabled", true)
                 $("#turnStatus").text(`${Game.scoreboard.opponentName.toUpperCase()}'S TURN`)
                 $("#turnStatus").css("color", "red")
+                if (data.centerTaken) Game.firstMove = false
+                console.log(data.centerTaken)
+                console.log(Game.firstMove)
+
             }
         })
 

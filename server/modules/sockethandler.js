@@ -2,25 +2,25 @@ var DatabaseHandler = require(__dirname + "/dbhandler.js")
 var SessionManager = require(__dirname + "/sessions.js")()
 var SocketServer
 
-module.exports = function (SocketServer) { //SocketHandler
+module.exports = function(SocketServer) { //SocketHandler
     //init
     SocketServer = SocketServer
 
-    SocketServer.on("connection", function (client) {
+    SocketServer.on("connection", function(client) {
         SessionManager.acceptClient(client)
         console.log("Klient się połączył:", client.id)
-        client.on("disconnect", function () {
+        client.on("disconnect", function() {
             SessionManager.clientLeft(client)
             console.log("Klient się rozłączył:", this.id)
         })
 
-        client.on("check-word", function (data) {
-            DatabaseHandler.isWord(data.word).then(function (answer) {
+        client.on("check-word", function(data) {
+            DatabaseHandler.isWord(data.word).then(function(answer) {
                 client.emit("check-word-resp", { word: data.word, answer: answer })
             })
         })
 
-        client.on("send-score", function (data) {
+        client.on("send-score", function(data) {
             let Session = SessionManager.getSessionByClientId(client.id)
             if (!Session) return
             let Game = Session.getGame()
@@ -29,8 +29,7 @@ module.exports = function (SocketServer) { //SocketHandler
                 Game.setScoreA(data.score)
                 let scores = Game.getScores()
                 Session.clientB.emit("score-update-resp", { mine: scores.b, opponents: scores.a })
-            }
-            else if (Session.clientB && client.id == Session.clientB.id) {
+            } else if (Session.clientB && client.id == Session.clientB.id) {
                 Game.setScoreB(data.score)
                 let scores = Game.getScores()
                 Session.clientA.emit("score-update-resp", { mine: scores.a, opponents: scores.b })
@@ -38,7 +37,7 @@ module.exports = function (SocketServer) { //SocketHandler
 
             client.emit("send-score-resp", { success: true })
         })
-        client.on("get-scores", function (data) {
+        client.on("get-scores", function(data) {
             let Session = SessionManager.getSessionByClientId(client.id)
             if (!Session) return
             let Game = Session.getGame()
@@ -48,7 +47,7 @@ module.exports = function (SocketServer) { //SocketHandler
             else if (Session.clientB && client.id == Session.clientB.id) client.emit("get-scores-resp", { mine: scores.b, opponents: scores.a })
         })
 
-        client.on("send-board", function (data) {
+        client.on("send-board", function(data) {
             let Session = SessionManager.getSessionByClientId(client.id)
             if (!Session) return
             let Game = Session.getGame()
@@ -61,7 +60,7 @@ module.exports = function (SocketServer) { //SocketHandler
             } else
                 client.emit("send-board-resp", { success: false })
         })
-        client.on("get-board", function (data) {
+        client.on("get-board", function(data) {
             let Session = SessionManager.getSessionByClientId(client.id)
             if (!Session) return
             let Game = Session.getGame()
@@ -69,7 +68,7 @@ module.exports = function (SocketServer) { //SocketHandler
             client.emit("get-board-resp", { board: Game.getBoard() })
         })
 
-        client.on("send-nickname", function (data) {
+        client.on("send-nickname", function(data) {
             let Session = SessionManager.getSessionByClientId(client.id)
             if (!Session) return
             let Game = Session.getGame()
@@ -83,8 +82,7 @@ module.exports = function (SocketServer) { //SocketHandler
                     let nicknames = Game.getNicknames()
                     if (Session.clientB) Session.clientB.emit("nickname-update-resp", { mine: nicknames.b, opponents: nicknames.a })
                 }
-            }
-            else if (Session.clientB && client.id == Session.clientB.id) {
+            } else if (Session.clientB && client.id == Session.clientB.id) {
                 if (Game.getNicknames().a == data.nickname) client.emit("send-nickname-resp", { accepted: false })
                 else {
                     Game.setNicknameB(data.nickname)
@@ -101,7 +99,7 @@ module.exports = function (SocketServer) { //SocketHandler
                 Session.clientB.emit("start-game-resp")
             }
         })
-        client.on("get-nicknames", function (data) {
+        client.on("get-nicknames", function(data) {
             let Session = SessionManager.getSessionByClientId(client.id)
             if (!Session) return
             let Game = Session.getGame()
@@ -111,7 +109,7 @@ module.exports = function (SocketServer) { //SocketHandler
             else if (Session.clientB && client.id == Session.clientB.id) client.emit("get-nicknames-resp", { mine: nicknames.b, opponents: nicknames.a })
         })
 
-        client.on("whose-turn", function (data) {
+        client.on("whose-turn", function(data) {
             let Session = SessionManager.getSessionByClientId(client.id)
             if (!Session) return
             let Game = Session.getGame()
@@ -119,7 +117,7 @@ module.exports = function (SocketServer) { //SocketHandler
             if (client.id == Session.clientA.id) client.emit("whose-turn-resp", { myTurn: Game.playerATurn() })
             else if (Session.clientB && client.id == Session.clientB.id) client.emit("whose-turn-resp", { myTurn: Game.playerBTurn() })
         })
-        client.on("end-turn", function (data) {
+        client.on("end-turn", function(data) {
             let Session = SessionManager.getSessionByClientId(client.id)
             if (!Session) return
             let Game = Session.getGame()
@@ -129,26 +127,31 @@ module.exports = function (SocketServer) { //SocketHandler
                     Game.nextTurn()
                     client.emit("end-turn-resp", { success: true })
 
-                    Session.clientA.emit("turn-update-resp", { myTurn: Game.playerATurn() })
-                    if (Session.clientB) Session.clientB.emit("turn-update-resp", { myTurn: Game.playerBTurn() })
+                    Session.clientA.emit("turn-update-resp", { myTurn: Game.playerATurn(), centerTaken: data.centerTaken })
+                    if (Session.clientB) Session.clientB.emit("turn-update-resp", { myTurn: Game.playerBTurn(), centerTaken: data.centerTaken })
 
                     if (data.skip) Game.playerASkipped++
-                    else Game.playerASkipped = 0
-                }
-                else client.emit("end-turn-resp", { success: false })
-            }
-            else if (Session.clientB && client.id == Session.clientB.id) {
+                        else {
+                            Game.playerASkipped = 0
+                            Game.playerBSkipped = 0
+                        }
+
+                } else client.emit("end-turn-resp", { success: false })
+            } else if (Session.clientB && client.id == Session.clientB.id) {
                 if (Game.playerBTurn()) {
                     Game.nextTurn()
                     client.emit("end-turn-resp", { success: true })
 
-                    if (Session.clientA) Session.clientA.emit("turn-update-resp", { myTurn: Game.playerATurn() })
-                    Session.clientB.emit("turn-update-resp", { myTurn: Game.playerBTurn() })
+                    if (Session.clientA) Session.clientA.emit("turn-update-resp", { myTurn: Game.playerATurn(), centerTaken: data.centerTaken })
+                    Session.clientB.emit("turn-update-resp", { myTurn: Game.playerBTurn(), centerTaken: data.centerTaken })
 
                     if (data.skip) Game.playerBSkipped++
-                    else Game.playerBSkipped = 0
-                }
-                else client.emit("end-turn-resp", { success: false })
+                        else {
+                            Game.playerASkipped = 0
+                            Game.playerBSkipped = 0
+                        }
+
+                } else client.emit("end-turn-resp", { success: false })
             }
 
             if (Game.playerASkipped == 2 && Game.playerBSkipped == 2) {
