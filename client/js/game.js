@@ -258,7 +258,7 @@ var Game = {
                 }
             }
         } else {
-            alert("Nie twoja tura śmieciu")
+            //alert("Nie twoja tura śmieciu")
         }
 
     },

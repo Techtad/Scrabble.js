@@ -36,8 +36,7 @@ button {
     border-radius: 5px;
 }
 
-button:disabled,
-button[disabled] {
+button:disabled, button[disabled] {
     background: black;
 }
 
@@ -52,6 +51,7 @@ button[disabled] {
 #turnStatus {
     padding-top: 20px;
     text-align: center;
+    color: white;
 }
 
 #placeWord {

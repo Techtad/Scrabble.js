@@ -26,6 +26,9 @@ var SocketHander = {
 
         })
         this.addResponseCallback("session-closed", function (data) {
+            Ui.blockEverything()
+            $("#turnStatus").text(`SESSION CLOSED!`)
+            $("#turnStatus").css("color", "black")
             alert(`Session closed, reason: ${data.reason}`)
         })
 
@@ -66,11 +69,13 @@ var SocketHander = {
                 if (Game.myTurn) {
                     $("#exchangeMode").prop("disabled", false)
                     $("#skip").prop("disabled", false)
-                    $("#turnStatus").text("TWOJA TURA")
+                    $("#turnStatus").text("YOUR TURN")
+                    $("#turnStatus").css("color", "green")
                 } else {
                     $("#exchangeMode").prop("disabled", true)
                     $("#skip").prop("disabled", true)
-                    $("#turnStatus").text("TURA PRZECIWNIKA")
+                    $("#turnStatus").text(`${Game.scoreboard.opponentName}'S TURN`)
+                    $("#turnStatus").css("color", "red")
                 }
             }
         })
@@ -79,14 +84,15 @@ var SocketHander = {
                 Game.myTurn = true
                 $("#exchangeMode").prop("disabled", false)
                 $("#skip").prop("disabled", false)
-                $("#turnStatus").text("TWOJA TURA")
+                $("#turnStatus").text("YOUR TURN")
+                $("#turnStatus").css("color", "green")
                 console.log("teraz moja tura")
             } else {
                 Game.myTurn = false
                 $("#exchangeMode").prop("disabled", true)
                 $("#skip").prop("disabled", true)
-                $("#turnStatus").text("TURA PRZECIWNIKA")
-                console.log("już nie moja tura")
+                $("#turnStatus").text(`${Game.scoreboard.opponentName}'S TURN`)
+                $("#turnStatus").css("color", "red")
             }
         })
 
