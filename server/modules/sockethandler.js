@@ -131,6 +131,9 @@ module.exports = function (SocketServer) { //SocketHandler
 
                     Session.clientA.emit("turn-update-resp", { myTurn: Game.playerATurn() })
                     if (Session.clientB) Session.clientB.emit("turn-update-resp", { myTurn: Game.playerBTurn() })
+
+                    if (data.skip) Game.playerASkipped++
+                    else Game.playerASkipped = 0
                 }
                 else client.emit("end-turn-resp", { success: false })
             }
@@ -141,8 +144,26 @@ module.exports = function (SocketServer) { //SocketHandler
 
                     if (Session.clientA) Session.clientA.emit("turn-update-resp", { myTurn: Game.playerATurn() })
                     Session.clientB.emit("turn-update-resp", { myTurn: Game.playerBTurn() })
+
+                    if (data.skip) Game.playerBSkipped++
+                    else Game.playerBSkipped = 0
                 }
                 else client.emit("end-turn-resp", { success: false })
+            }
+
+            if (Game.playerASkipped == 2 && Game.playerBSkipped == 2) {
+                let draw = false
+                let winner = null
+                let scores = Game.getScores()
+                let names = Game.getNicknames()
+                if (scores.a == scores.b)
+                    draw = true
+                else if (scores.a > scores.b)
+                    winner = names.a
+                else winner = names.b
+
+                Session.clientA.emit("game-over-resp", { draw: draw, winner: winner })
+                Session.clientB.emit("game-over-resp", { draw: draw, winner: winner })
             }
         })
     })

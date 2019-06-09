@@ -6,6 +6,8 @@ class ScrabbleGame {
         this.nicknameA = ""
         this.nicknameB = ""
         this.turnA = true
+        this.playerASkipped = 0
+        this.playerBSkipped = 0
     }
 
     setScoreA(score) {
