@@ -91,9 +91,9 @@ var Game = {
 
         this.clock = new THREE.Clock()
 
-        this.grid = new Grid(1000, 100)
+        /* this.grid = new Grid(1000, 100)
         this.scene.add(this.grid.getGrid())
-
+ */
         this.createScene()
 
         $("#root").append(this.renderer.domElement)

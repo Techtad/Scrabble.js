@@ -12,7 +12,7 @@ canvas {
     position: fixed;
     z-index: 1;
     width: 224px;
-    height: 275px;
+    height: 220px;
     border: 2px orange outset;
     background: yellow;
     border-radius: 5px;
@@ -23,7 +23,7 @@ canvas {
     z-index: 1;
     right: 0;
     width: 224px;
-    height: 275px;
+    height: 220px;
     border: 2px orange outset;
     background: yellow;
     border-radius: 5px;
@@ -36,7 +36,8 @@ button {
     border-radius: 5px;
 }
 
-button:disabled, button[disabled] {
+button:disabled,
+button[disabled] {
     background: black;
 }
 
