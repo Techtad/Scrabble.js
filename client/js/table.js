@@ -5,7 +5,7 @@ class Table {
         mtlLoader.setResourcePath("model/")
         mtlLoader.setPath("model/")
 
-        Ui.setOverlay("LOADING...")
+        Ui.setOverlay("LOADING...", 1)
         mtlLoader.load("wooden-coffe-table.mtl", function (materials) {
             materials.preload()
 

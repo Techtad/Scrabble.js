@@ -93,13 +93,14 @@ var Ui = {
         $("#skip").prop("disabled", true)
     },
 
-    setOverlay: function (msg) {
+    setOverlay: function (msg, opacity) {
         $("#overlayMessage").text(msg)
+        $("#overlay").css("background-color", `rgba(0, 0, 0, ${opacity})`)
         $("#overlay").css("display", "block")
     },
 
     removeOverlay: function () {
-        $("#overlayMessage").empty() //tak tylko na wszelki wypadek
+        $("#overlayMessage").empty()
         $("#overlay").css("display", "none")
     }
 }
