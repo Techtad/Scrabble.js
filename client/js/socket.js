@@ -25,12 +25,15 @@ var SocketHander = {
             }
         })
         this.addResponseCallback("session-closed", function (data) {
+            SocketHander.client.emit("return-to-lobby")
             Game.myTurn = false
             Ui.blockEverything()
             $("#turnStatus").text(`SESSION CLOSED!`)
             $("#turnStatus").css("color", "black")
             alert(`Session closed, reason: ${data.reason}`)
-            PageUtils.redirect("/")
+            Game.reset()
+            Game.pause()
+            Lobby.reveal()
         })
 
         this.addResponseCallback("start-game", function (data) {
@@ -51,7 +54,9 @@ var SocketHander = {
             $("#turnStatus").text(msg.toUpperCase())
             $("#turnStatus").css("color", "darkblue")
             alert(msg)
-            PageUtils.redirect("/")
+            Game.reset()
+            Game.pause()
+            Lobby.reveal()
         })
 
         this.addResponseCallback("score-update", function (data) {
@@ -84,6 +89,9 @@ var SocketHander = {
                     $("#turnStatus").text(`${Game.scoreboard.opponentName.toUpperCase()}'S TURN`)
                     $("#turnStatus").css("color", "red")
                 }
+
+                Lobby.hide()
+                Game.resume()
             }
         })
         this.addResponseCallback("turn-update", function (data) {
@@ -110,7 +118,7 @@ var SocketHander = {
             }
         })
 
-        this.addResponseCallback("send-nickname", function (data) {
+        /* this.addResponseCallback("send-nickname", function (data) {
             if (!data.accepted) {
                 let nick = prompt("Nickname taken, try again:")
                 SocketHander.emit("send-nickname", { nickname: nick })
@@ -119,7 +127,7 @@ var SocketHander = {
 
         let nick = prompt("Enter nickname:")
         while (!nick) nick = prompt("Enter non-empty nickname:")
-        SocketHander.emit("send-nickname", { nickname: nick })
+        SocketHander.emit("send-nickname", { nickname: nick }) */
     },
 
     callbacks: [],

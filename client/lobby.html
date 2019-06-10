@@ -6,12 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/lobby.css">
-    <script src="js/lobby/lobby.js"></script>
+    <!-- Biblioteki -->
+    <!-- <script src="js/lib/jquery.js"></script>
+    <script src="js/lib/socket.io.js"></script> -->
+    <!-- Main -->
+    <!-- <script src="js/lobby/lobby.js"></script> -->
     <title>Scrabble Lobby</title>
 </head>
 
 <body>
-    <input type="button" value="TEMP" onclick="window.location = '/game.html'">
+    <div id="lobbyOverlay">
+        <div id="lobbyOverlayMessage"></div>
+    </div>
+    <header>Scrabble Lobby</header>
+    <div id="nicknameForm">
+        <h1 id="nicknameMessage" class="noselect">Enter nickname:</h1>
+        <input type="text" name="nicknameInput" id="nicknameInput">
+        <input type="button" value="Send" id="sendButton">
+    </div>
+    <div id="playerListContainer">
+        <h1>Your name: <span id="yourName"></span></h1>
+        <div id="playerListEntries">
+            <div id="playerListHeaders" class="listEntry">
+                <span class="left">Nickname</span>
+                <span class="right">Status</span>
+            </div>
+            <div id="playerList"></div>
+        </div>
+    </div>
 </body>
 
 </html>

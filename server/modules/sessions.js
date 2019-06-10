@@ -85,6 +85,14 @@ module.exports = function () { //SessionManager
                 if (s && s.hasClientId(clientId)) return s
             }
             return null
+        },
+
+        createSession: function (clientA, clientB) {
+            LastSessionId++
+            SessionList[LastSessionId] = new Session(LastSessionId)
+            SessionList[LastSessionId].acceptClient(clientA)
+            SessionList[LastSessionId].acceptClient(clientB)
+            return SessionList[LastSessionId]
         }
     }
 }
