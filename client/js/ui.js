@@ -1,8 +1,8 @@
 var Ui = {
-    clicks: function () {
-        $("#letterGet").on("click", function () {
+    clicks: function() {
+        $("#letterGet").on("click", function() {
             var count = 15
-            var start = setInterval(function () {
+            var start = setInterval(function() {
                 if (count <= 0) {
                     clearInterval(start)
                 } else {
@@ -16,7 +16,7 @@ var Ui = {
             $("#scoreboard-content").html("<h3>" + Game.scoreboard.myName + " : " + Game.scoreboard.myScore + "</h3>" + "<h3>" + Game.scoreboard.opponentName + " : " + Game.scoreboard.opponentScore + "</h3>")
         })
 
-        $("#exchangeMode").on("click", function () {
+        $("#exchangeMode").on("click", function() {
             if (!Game.exchange) {
                 $(this).text("CANCEL REDRAWING")
                 $("#exchange").prop("disabled", false)
@@ -41,19 +41,19 @@ var Ui = {
             }
         })
 
-        $("#exchange").on("click", function () {
-            SocketHander.emit("end-turn", { skip: true }, function (data) {
+        $("#exchange").on("click", function() {
+            SocketHander.emit("end-turn", { skip: true }, function(data) {
                 if (data.success) {
                     Game.exchangeLetters()
                 } else alert("You can't exchange letters when it's not your turn!")
             })
         })
 
-        $("#wordReset").on("click", function () {
+        $("#wordReset").on("click", function() {
             Game.resetWord()
         })
 
-        $("#placeWord").on("click", function () {
+        $("#placeWord").on("click", function() {
             if (Game.firstMove) {
                 Game.centerCheck()
             } else {
@@ -61,8 +61,8 @@ var Ui = {
             }
         })
 
-        $("#skip").on("click", function () {
-            SocketHander.emit("end-turn", { skip: true }, function (data) {
+        $("#skip").on("click", function() {
+            SocketHander.emit("end-turn", { skip: true }, function(data) {
                 if (data.success) {
                     /* Game.turnSkipCount += 1
                     if (Game.turnSkipCount >= 2) {
@@ -79,12 +79,12 @@ var Ui = {
 
         })
 
-        $("#root").on("click", function () {
-            Game.rayClick()
+        $("#root").on("mousedown", function(event) {
+            Game.rayClick(event)
         })
     },
 
-    blockEverything: function () {
+    blockEverything: function() {
         $("#letterGet").prop("disabled", true)
         $("#placeWord").prop("disabled", true)
         $("#wordReset").prop("disabled", true)
@@ -93,13 +93,13 @@ var Ui = {
         $("#skip").prop("disabled", true)
     },
 
-    setOverlay: function (msg, opacity) {
+    setOverlay: function(msg, opacity) {
         $("#overlayMessage").text(msg)
         $("#overlay").css("background-color", `rgba(0, 0, 0, ${opacity})`)
         $("#overlay").css("display", "block")
     },
 
-    removeOverlay: function () {
+    removeOverlay: function() {
         $("#overlayMessage").empty()
         $("#overlay").css("display", "none")
     }
