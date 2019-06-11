@@ -4,7 +4,8 @@ var EventList = ["check-word",
     "send-board", "get-board", "board-update",
     "send-nickname", "get-nicknames", "nickname-update",
     "whose-turn", "end-turn", "turn-update",
-    "start-game", "game-over"
+    "start-game", "game-over",
+    "return-to-lobby"
 ]
 
 var SocketHander = {
@@ -38,6 +39,7 @@ var SocketHander = {
                     Game.pause()
                     Lobby.reveal()
                     $(this).remove()
+                    SocketHander.emit("return-to-lobby")
                 },
                 buttons: {
                     "Return to Lobby": function (event, ui) {
@@ -73,6 +75,7 @@ var SocketHander = {
                     Game.pause()
                     Lobby.reveal()
                     $(this).remove()
+                    SocketHander.emit("return-to-lobby")
                 },
                 buttons: {
                     "Return to Lobby": function (event, ui) {

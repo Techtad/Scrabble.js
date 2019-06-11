@@ -179,10 +179,6 @@ module.exports = function (SocketServer) { //SocketHandler
                 Session.clientB.emit("game-over-resp", { draw: draw, winner: winner })
 
                 Session.kill()
-
-                Lobby.setPlayerStatusByNickname(names.a, "available")
-                Lobby.setPlayerStatusByNickname(names.b, "available")
-                for (let c of Lobby.getClients()) c.emit("lobby-update-resp", { players: Lobby.getPlayerInfo() })
             }
         })
 
