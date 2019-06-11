@@ -30,10 +30,22 @@ var SocketHander = {
             Ui.blockEverything()
             $("#turnStatus").text(`SESSION CLOSED!`)
             $("#turnStatus").css("color", "black")
-            alert(`Session closed, reason: ${data.reason}`)
-            Game.reset()
-            Game.pause()
-            Lobby.reveal()
+            $("<div>").text(data.reason).dialog({
+                title: "Session Closed",
+                modal: true,
+                close: function (event, ui) {
+                    Game.reset()
+                    Game.pause()
+                    Lobby.reveal()
+                    $(this).remove()
+                },
+                buttons: {
+                    "Return to Lobby": function (event, ui) {
+                        $(this).dialog("close")
+                    },
+                }
+            })
+
         })
 
         this.addResponseCallback("start-game", function (data) {
@@ -50,13 +62,24 @@ var SocketHander = {
         })
         this.addResponseCallback("game-over", function (data) {
             Ui.blockEverything()
-            let msg = `Game over! ${data.draw ? "It's a draw!" : `${data.winner} won!`}`
+            let msg = `Game over!<br>${data.draw ? "It's a draw!" : `${data.winner} won!`}`
             $("#turnStatus").text(msg.toUpperCase())
             $("#turnStatus").css("color", "darkblue")
-            alert(msg)
-            Game.reset()
-            Game.pause()
-            Lobby.reveal()
+            $("<div>").text(`${data.draw ? "It's a draw!" : `${data.winner} won!`}`).dialog({
+                title: "Game Over!",
+                modal: true,
+                close: function (event, ui) {
+                    Game.reset()
+                    Game.pause()
+                    Lobby.reveal()
+                    $(this).remove()
+                },
+                buttons: {
+                    "Return to Lobby": function (event, ui) {
+                        $(this).dialog("close")
+                    },
+                }
+            })
         })
 
         this.addResponseCallback("score-update", function (data) {

@@ -177,7 +177,7 @@ module.exports = function (SocketServer) { //SocketHandler
             if (Lobby.getNicknameByClient(client) && Lobby.getClientByNickname(data.nickname)) {
                 client.emit("invite-player-resp", { success: true })
                 Lobby.getClientByNickname(data.nickname).emit("invitation-resp", { nickname: Lobby.getNicknameByClient(client) })
-            } else client.emit("invite-player-resp", { success: false, reason: "Failed to invite player. Reason: Player not in lobby" })
+            } else client.emit("invite-player-resp", { success: false, reason: "That player is no longer in lobby" })
         })
         client.on("invitation-reply", function (data) {
             if (data.agreed) {

@@ -75,17 +75,41 @@ var Lobby = {
                 Lobby.getElem("lobbyOverlay").css("background-color", "rgba(0,0,0,0.5)")
                 Lobby.getElem("lobbyOverlay").css("display", "block")
             } else {
-                alert(data.reason)
+                $("<div>").text(data.reason).dialog({
+                    title: "Failed to invite player",
+                    modal: true,
+                    close: function (event, ui) { $(this).remove() },
+                })
             }
         })
         Lobby.client.on("invitation-resp", function (data) {
             console.log("Event socketowy: ", "invitation", data)
-            let reply = confirm(`You have been invitated to a game by ${data.nickname}. Do you accept?`)
-            Lobby.client.emit("invitation-reply", { nickname: data.nickname, agreed: reply })
+            $("<div>").text(`You have been invitated to a game by ${data.nickname}.`).dialog({
+                title: "Invitation",
+                modal: true,
+                close: function (event, ui) {
+                    Lobby.client.emit("invitation-reply", { nickname: data.nickname, agreed: false })
+                    $(this).remove()
+                },
+                buttons: {
+                    Accept: function (event, ui) {
+                        Lobby.client.emit("invitation-reply", { nickname: data.nickname, agreed: true })
+                        $(this).remove()
+                    },
+                    Reject: function (event, ui) {
+                        Lobby.client.emit("invitation-reply", { nickname: data.nickname, agreed: false })
+                        $(this).remove()
+                    }
+                }
+            })
         })
         Lobby.client.on("invitaion-rejected-resp", function (data) {
             console.log("Event socketowy: ", "invitaion-rejected", data)
-            alert("Your invitation has been rejected")
+            $("<div>").text("Your invitation has been rejected").dialog({
+                title: "Invitation Response",
+                modal: true,
+                close: function (event, ui) { $(this).remove() },
+            })
             Lobby.getElem("lobbyOverlay").css("display", "none")
         })
         Lobby.client.on("session-ready-resp", function (data) {
