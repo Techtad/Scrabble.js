@@ -26,7 +26,7 @@ var SocketHander = {
             }
         })
         this.addResponseCallback("session-closed", function (data) {
-            SocketHander.client.emit("return-to-lobby")
+            Tutorial.clear()
             Game.myTurn = false
             Ui.blockEverything()
             $("#turnStatus").text(`SESSION CLOSED!`)
@@ -56,7 +56,10 @@ var SocketHander = {
             var start = setInterval(function () {
                 if (count <= 0) {
                     clearInterval(start)
-                    Tutorial.start()
+                    if (Game.myTurn && !Game.tutorialShown) {
+                        Game.tutorialShown = true
+                        Tutorial.start()
+                    }
                 } else {
                     Game.giveLetter()
                     count--
@@ -65,6 +68,7 @@ var SocketHander = {
             // $("#letterGet").click()
         })
         this.addResponseCallback("game-over", function (data) {
+            Tutorial.clear()
             Ui.blockEverything()
             let msg = `Game over!<br>${data.draw ? "It's a draw!" : `${data.winner} won!`}`
             $("#turnStatus").html(msg.toUpperCase())
@@ -134,6 +138,10 @@ var SocketHander = {
                 if (data.centerTaken) Game.firstMove = false
                 console.log(data.centerTaken)
                 console.log(Game.firstMove)
+                if (!Game.tutorialShown) {
+                    Game.tutorialShown = true
+                    Tutorial.start()
+                }
             } else {
                 Game.myTurn = false
                 $("#exchangeMode").prop("disabled", true)

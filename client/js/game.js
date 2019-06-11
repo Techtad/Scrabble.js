@@ -70,6 +70,8 @@ var Game = {
 
         this.exchangeTab = []
 
+        this.tutorialShown = false
+
         this.scene = new THREE.Scene()
 
         this.renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -942,6 +944,7 @@ var Game = {
         this.isHorizontal = null
         this.firstMove = true
         this.exchange = false
+        this.tutorialShown = false
         this.clearTray()
     }
 }

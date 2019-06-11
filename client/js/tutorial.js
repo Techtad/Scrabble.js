@@ -20,7 +20,7 @@ var Tutorial = {
         if (this.dialog) this.dialog.remove()
         this.dialog = $("<div>")
 
-        dialog.html(stageData.html).dialog({
+        this.dialog.html(stageData.html).dialog({
             modal: true,
             resizable: false,
             draggable: false,
@@ -35,6 +35,7 @@ var Tutorial = {
                 },
                 "Skip Tutorial": function () {
                     PageUtils.setCookie("tutorialskipped", true)
+                    $(this).remove()
                 }
             }
         })
