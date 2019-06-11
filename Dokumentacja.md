@@ -20,6 +20,6 @@ Projekt wymaga zainstalowanego pakietu [node.js](https://nodejs.org/en/)
 7. Gra kończy się, kiedy każdy z graczy dwa razy pod rząd nie ułoży słowa(wymienia 0 lub więcej klocków).
 8. Wygrywa gracz, który ma najwięcej punktów. Możliwy jest remis.
 
-#Autorzy
+# Autorzy
  - [Tadeusz Kantor](https://github.com/Techtad)
  - [Jakub Szwast](https://github.com/Shwastoo)
