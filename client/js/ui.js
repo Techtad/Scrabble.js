@@ -1,5 +1,17 @@
 var Ui = {
     clicks: function() {
+        $("#hideUI").on("click", function() {
+            $("#ui").css("display", "none")
+            $("#showUI").css("display", "block")
+        })
+
+        $("#showUI").on("click", function() {
+            $("#ui").css("display", "block")
+            $("#showUI").css("display", "none")
+
+        })
+
+
         $("#letterGet").on("click", function() {
             var count = 15
             var start = setInterval(function() {

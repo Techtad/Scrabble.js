@@ -33,6 +33,11 @@ canvas {
     border-radius: 5px;
 }
 
+#title {
+    text-align: left;
+    padding: 10px;
+}
+
 #scoreboard {
     position: fixed;
     z-index: 1;
@@ -55,8 +60,34 @@ button {
     border-radius: 5px;
 }
 
-button:disabled, button[disabled] {
+button:disabled,
+button[disabled] {
     background: black;
+}
+
+#hideUI {
+    position: absolute;
+    top: 13px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+}
+
+#showUI {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+}
+
+#turnStatus {
+    padding-top: 5px;
+    text-align: center;
+    color: darkorange;
 }
 
 #letterGet {
@@ -65,12 +96,6 @@ button:disabled, button[disabled] {
     left: 10px;
     width: 200px;
     height: 50px;
-}
-
-#turnStatus {
-    padding-top: 20px;
-    text-align: center;
-    color: darkorange;
 }
 
 #placeWord {
@@ -116,6 +141,10 @@ button:disabled, button[disabled] {
 h3 {
     color: darkorange;
     text-align: center;
+}
+
+h2 {
+    color: darkorange;
 }
 
 #overlay {

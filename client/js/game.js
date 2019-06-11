@@ -58,6 +58,8 @@ var Game = {
 
         this.wordTab = []
 
+        this.swapTab = []
+
         this.selectedLetter = null
 
         this.isHorizontal = null
@@ -222,21 +224,22 @@ var Game = {
 
     rayClick: function(event) {
         console.log(event.button)
-        if (this.myTurn) {
-            //obsługa raycastera w zależności od tego, co zostało kliknięte
-            this.mouseVector.x = (event.clientX / $(window).width()) * 2 - 1;
-            this.mouseVector.y = -(event.clientY / $(window).height()) * 2 + 1;
 
-            this.raycaster.setFromCamera(this.mouseVector, this.camera);
+        //obsługa raycastera w zależności od tego, co zostało kliknięte
+        this.mouseVector.x = (event.clientX / $(window).width()) * 2 - 1;
+        this.mouseVector.y = -(event.clientY / $(window).height()) * 2 + 1;
 
-            this.intersects = this.raycaster.intersectObjects(this.scene.children, true);
+        this.raycaster.setFromCamera(this.mouseVector, this.camera);
 
-            //console.log(this.intersects.length)
-            //console.log(this.scene)
+        this.intersects = this.raycaster.intersectObjects(this.scene.children, true);
 
-            if (this.intersects.length > 0) {
-                var obj = this.intersects[0].object
-                    //console.log(obj)
+        //console.log(this.intersects.length)
+        //console.log(this.scene)
+
+        if (this.intersects.length > 0) {
+            var obj = this.intersects[0].object
+                //console.log(obj)
+            if (event.button == 0) {
                 if (obj.name.split("_")[0] == "letterBlock") {
                     if (!this.exchange) {
                         this.letterSelect()
@@ -250,15 +253,23 @@ var Game = {
                     } else {
                         this.exchangeMode()
                     }
-                } else if (obj.name.split("_")[0] == "tray") {
-                    //this.trayMove()
                 } else if (obj.name.split("_")[0] == "tile") {
-                    if (this.selectedLetter != null) {
-                        this.letterPlaceCheck()
+                    if (this.myTurn) {
+                        if (this.selectedLetter != null) {
+                            this.letterPlaceCheck()
+                        }
                     }
-
+                }
+            } else if (event.button == 2) {
+                if (obj.name.split("_")[0] == "letterBlock") {
+                    this.swapLetters()
+                } else if (obj.name.split("_")[0] == "letter") {
+                    this.intersects[0].object = this.intersects[0].object.parent
+                    this.swapLetters()
                 }
             }
+
+
         } else {
             //alert("Nie twoja tura śmieciu")
         }
@@ -306,25 +317,27 @@ var Game = {
         }
     },
 
-    trayMove: function() {
+    swapLetters: function() {
         var obj = this.intersects[0].object
             //jeśli jakiś klocek jest zaznaczony i nie znajduje się na planszy, tylko na trayu, następuje zmiana miejsca w trayu i w tablicy
             //WAŻNE - jeśli klocek X został postawiony na planszy, a później klocek Y zostanie postawiony na trayu na poprzednim miejscu klocka X...
             //...to klocek X po zdjeciu z planszy wskoczy na poprzednie miejsce klocka Y
         if (this.selectedLetter != null) {
             if (this.wordTab.indexOf(this.selectedLetter) == "-1") {
-                var clickedID = obj.name.split("_")[1]
-                var swappedID = this.selectedLetter.position.x / 10
-                var traySwap = this.trayTab[clickedID]
-                this.trayTab[clickedID] = this.trayTab[swappedID]
-                this.trayTab[swappedID] = traySwap
-                this.selectedLetter.position.x = obj.position.x
+                var toSwapPosX = obj.position.x
+                var toSwapID = this.trayTab.indexOf(obj)
+                var selectedID = this.selectedLetter.position.x / 10
+                var traySwap = this.trayTab[toSwapID]
+                this.trayTab[toSwapID] = this.trayTab[selectedID]
+                this.trayTab[selectedID] = traySwap
+                obj.position.x = this.selectedLetter.position.x
+                this.selectedLetter.position.x = toSwapPosX
                 this.selectedLetter.color = "white"
                 this.selectedLetter.material = this.selectedLetter.color
                 this.selectedLetter = null
-                    //console.log(this.trayTab)
             }
         }
+
     },
 
     letterPlaceCheck: function() {
