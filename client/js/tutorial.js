@@ -9,7 +9,7 @@ var TutorialStages = [
     { html: "If you can't think of any word to make, you can choose to redraw some of your pieces using the <b>REDRAW LETTERS</b> button.", width: 440, arrow: { pos: ["110px", "145px"], rot: 180 } },
     { html: "Once you're in <b>redraw mode</b>, select the pieces you want to exchange on your tray.<br>Then you can redraw using the <b>REDRAW!</b> button.<br>This uses up your turn.", width: 440, arrow: { pos: ["215px", "145px"], rot: 180 } },
     { html: "The game ends when both players have <b>redrawn twice in a row</b>.<br>The player with the most points wins.", width: 430 },
-    { html: "That is all.<br>You now how to play our game.<br>Have fun!", width: 380 }
+    { html: "That is all.<br>You now know how to play our game.<br>Have fun!", width: 350 }
 ]
 
 var Tutorial = {
