@@ -63,7 +63,7 @@ var SocketHander = {
         this.addResponseCallback("game-over", function (data) {
             Ui.blockEverything()
             let msg = `Game over!<br>${data.draw ? "It's a draw!" : `${data.winner} won!`}`
-            $("#turnStatus").text(msg.toUpperCase())
+            $("#turnStatus").html(msg.toUpperCase())
             $("#turnStatus").css("color", "darkblue")
             $("<div>").text(`${data.draw ? "It's a draw!" : `${data.winner} won!`}`).dialog({
                 title: "Game Over!",
