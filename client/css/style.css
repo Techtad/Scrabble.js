@@ -50,19 +50,20 @@ canvas {
 #lastMove {
     position: fixed;
     z-index: 1;
-    width: 500px;
+    width: 50vw;
     height: 42px;
     line-height: 32px;
     padding: 2px;
     border: 2px orange outset;
     background: yellow;
     border-radius: 5px;
-    left: calc(50vw - 250px);
+    left: 25vw;
     top: 0;
     color: orange;
     text-align: center;
     font-size: 21px;
     text-transform: uppercase;
+    overflow: hidden;
 }
 
 .word {
@@ -95,8 +96,7 @@ button {
     border-radius: 5px;
 }
 
-button:disabled,
-button[disabled] {
+button:disabled, button[disabled] {
     background: black;
 }
 
