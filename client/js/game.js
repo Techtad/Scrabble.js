@@ -954,5 +954,7 @@ var Game = {
         this.clearTray()
         $("#exchange").css("background-color", "")
         $("#exchangeMode").text("REDRAW LETTERS")
+
+        $("#lastMove").html("&nbsp;")
     }
 }
