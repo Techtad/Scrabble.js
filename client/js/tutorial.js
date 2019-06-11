@@ -7,7 +7,7 @@ var TutorialStages = [
     { html: "After you've placed your pieces, click the <b>PLACE WORD</b> button to place it. If it's correct, the word will be placed on the board and you will have completed your turn.<br>You will receive points equivalent to the length of the word.", width: 520, arrow: { pos: ["110px", "85px"], rot: 180 } },
     { html: "If you make a mistake, you can retrieve your pieces my clicking the <b>RESET WORD</b> button.", width: 420, arrow: { pos: ["215px", "85px"], rot: 180 } },
     { html: "If you can't think of any word to make, you can choose to redraw some of your pieces using the <b>REDRAW LETTERS</b> button.", width: 440, arrow: { pos: ["110px", "145px"], rot: 180 } },
-    { html: "Once you're in <b>redraw mode</b>, select the pieces you want to exchange on your tray.<br>Then you redraw then using the <b>REDRAW!</b> button.<br>This uses up your turn.", width: 440, arrow: { pos: ["215px", "145px"], rot: 180 } },
+    { html: "Once you're in <b>redraw mode</b>, select the pieces you want to exchange on your tray.<br>Then you can redraw using the <b>REDRAW!</b> button.<br>This uses up your turn.", width: 440, arrow: { pos: ["215px", "145px"], rot: 180 } },
     { html: "The game ends when both players have <b>redrawn twice in a row</b>.<br>The player with the most points wins.", width: 430 },
     { html: "That is all.<br>You now how to play our game.<br>Have fun!" }
 ]
