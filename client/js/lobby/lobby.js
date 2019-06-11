@@ -75,6 +75,7 @@ var Lobby = {
                 Lobby.waitDialog.text("Waiting for response...").dialog({
                     title: "Invitation Sent",
                     modal: true,
+                    resizable: false,
                     close: function (event, ui) {
                         Lobby.client.emit("cancel-invitation")
                         $(this).remove()
@@ -89,6 +90,7 @@ var Lobby = {
                 $("<div>").text(data.reason).dialog({
                     title: "Failed to invite player",
                     modal: true,
+                    resizable: false,
                     close: function (event, ui) { $(this).remove() },
                 })
             }
@@ -98,6 +100,7 @@ var Lobby = {
             $("<div>").text(`You have been invitated to a game by ${data.nickname}.`).dialog({
                 title: "Invitation",
                 modal: true,
+                resizable: false,
                 close: function (event, ui) {
                     Lobby.client.emit("invitation-reply", { nickname: data.nickname, agreed: false })
                     $(this).remove()
@@ -118,6 +121,7 @@ var Lobby = {
             $("<div>").text(data.reason).dialog({
                 title: "Invitation Invalid",
                 modal: true,
+                resizable: false,
                 close: function (event, ui) { $(this).remove() },
             })
         })
@@ -126,6 +130,7 @@ var Lobby = {
             $("<div>").text("Your invitation has been rejected").dialog({
                 title: "Invitation Response",
                 modal: true,
+                resizable: false,
                 close: function (event, ui) { $(this).remove() },
             })
             if (Lobby.waitDialog) Lobby.waitDialog.remove()

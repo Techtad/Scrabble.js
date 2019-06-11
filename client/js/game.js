@@ -647,6 +647,7 @@ var Game = {
             $("<div>").text("You have to place any block on the yellow square").dialog({
                 title: "Invalid first move",
                 modal: true,
+                resizable: false,
                 close: function (event, ui) { $(this).remove() },
             })
         }

@@ -34,6 +34,7 @@ var SocketHander = {
             $("<div>").text(data.reason).dialog({
                 title: "Session Closed",
                 modal: true,
+                resizable: false,
                 close: function (event, ui) {
                     Game.reset()
                     Game.pause()
@@ -70,6 +71,7 @@ var SocketHander = {
             $("<div>").text(`${data.draw ? "It's a draw!" : `${data.winner} won!`}`).dialog({
                 title: "Game Over!",
                 modal: true,
+                resizable: false,
                 close: function (event, ui) {
                     Game.reset()
                     Game.pause()
