@@ -117,6 +117,8 @@ var Ui = {
         $("#exchangeMode").prop("disabled", true)
         $("#exchange").prop("disabled", true)
         $("#skip").prop("disabled", true)
+        $("#exchange").css("background-color", "")
+        $("#exchangeMode").text("REDRAW LETTERS")
     },
 
     setOverlay: function (msg, opacity) {
