@@ -244,3 +244,10 @@ h2 {
     top: 45%;
     color: white;
 }
+
+.tutorialArrow {
+    position: fixed;
+    z-index: 101;
+    width: 160px;
+    height: 90px;
+}

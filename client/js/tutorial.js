@@ -1,7 +1,7 @@
 var TutorialStages = [
-    { html: "Welcome to Scrabble!<br>This quick tutorial will teach you how to play" },
-    { html: "Stage 2" },
-    { html: "Stage 3<br><br><br>" },
+    { html: "Welcome to Scrabble!<br>This short tutorial will teach you how to play." },
+    { html: "Stage 2", pos: [100, 300] },
+    { html: "Stage 3<br><br><br>", arrow: { pos: [50, 50], rot: -45 } },
     { html: "<br><br>Stage 4" },
     { html: "And that's all.<br>You now know how to play our game. We hope you enjoy it.<br>Good luck!" }
 ]
@@ -18,7 +18,7 @@ var Tutorial = {
         this.stage++
         let stageData = TutorialStages[this.stage]
 
-        if (this.dialog) this.dialog.remove()
+        if (this.dialog) { this.dialog.remove(); this.dialog = null }
         this.dialog = $("<div>")
 
         let dialogOptions = {
@@ -27,9 +27,24 @@ var Tutorial = {
             draggable: false,
             title: "Tutorial",
             close: function (event, ui) {
-                if (Tutorial.stage != TutorialStages.length - 1) Tutorial.nextStage()
+                if (Tutorial.arrow) { Tutorial.arrow.remove(); Tutorial.arrow = null }
                 $(this).remove()
+                Tutorial.dialog = null
+                if (Tutorial.stage != TutorialStages.length - 1) Tutorial.nextStage()
             },
+        }
+
+        if (stageData.pos) dialogOptions.position = stageData.pos
+
+        if (stageData.arrow) {
+            if (Tutorial.arrow) { Tutorial.arrow.remove(); Tutorial.arrow = null }
+            Tutorial.arrow = $("<img id='test'>")
+            Tutorial.arrow.attr("src", "/gfx/tutorial-arrow.png")
+            Tutorial.arrow.addClass("tutorialArrow")
+            Tutorial.arrow.css("left", `${stageData.arrow.pos[0]}px`)
+            Tutorial.arrow.css("top", `${stageData.arrow.pos[1]}px`)
+            Tutorial.arrow.css("transform", `rotate(${stageData.arrow.rot}deg)`)
+            $("#game").append(Tutorial.arrow)
         }
 
         let lastStage = (Tutorial.stage == TutorialStages.length - 1)
@@ -42,7 +57,9 @@ var Tutorial = {
         }
         dialogOptions.buttons[rightButton] = function () {
             PageUtils.setCookie("tutorialskipped", true)
+            if (Tutorial.arrow) { Tutorial.arrow.remove(); Tutorial.arrow = null }
             $(this).remove()
+            Tutorial.dialog = null
         }
 
         if (lastStage) {
@@ -54,6 +71,7 @@ var Tutorial = {
     },
 
     clear: function () {
-        if (this.dialog) this.dialog.remove()
+        if (this.arrow) { this.arrow.remove(); this.arrow = null }
+        if (this.dialog) { this.dialog.remove(); this.dialog = null }
     }
 }
