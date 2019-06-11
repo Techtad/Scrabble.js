@@ -19,3 +19,7 @@ Projekt wymaga zainstalowanego pakietu [node.js](https://nodejs.org/en/)
 6. Ułożenie słowa lub wymiana klocków kończy turę gracza.
 7. Gra kończy się, kiedy każdy z graczy dwa razy pod rząd nie ułoży słowa(wymienia 0 lub więcej klocków).
 8. Wygrywa gracz, który ma najwięcej punktów. Możliwy jest remis.
+
+#Autorzy
+ - [Tadeusz Kantor](https://github.com/Techtad)
+ - [Jakub Szwast](https://github.com/Shwastoo)
