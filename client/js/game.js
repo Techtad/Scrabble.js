@@ -715,10 +715,13 @@ var Game = {
         }
 
         SocketHander.emit("check-word", { word: word }, function(data) {
-            alert(`Word '${data.word}' is ${data.answer ? "correct" : "incorrect"}!`)
+            if (!data.answer) {
+                $("#lastMove").css("color", "red")
+                $("#lastMove").html(`The word <span class='word'>'${data.word}'</span> is incorrect!`)
+            }
 
             if (data.answer) {
-                SocketHander.emit("end-turn", { skip: false, centerTaken: true, }, function(data) {
+                SocketHander.emit("end-turn", { skip: false, centerTaken: true, word: data.word }, function(data) {
                     if (!data.success) {
                         alert("ERROR: Not my turn")
                         return

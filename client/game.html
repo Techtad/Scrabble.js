@@ -36,10 +36,10 @@
     <iframe id="lobby" src="/lobby.html" frameborder="0"></iframe>
     <div id="game">
         <div id="overlay">
-            <div id="overlayMessage"></div>
+            <div id="overlayMessage" class="noselect"></div>
         </div>
         <button id="showUI">+</button>
-        <div id="ui">
+        <div id="ui" class="noselect">
             <h2 id="title">SCRUBBLE</h2>
             <button id="hideUI">-</button>
             <!-- <button id="letterGet">START GAME</button><br> -->
@@ -50,9 +50,10 @@
             <button id="exchange" disabled>REDRAW!</button><br>
             <!-- <button id="skip" disabled>SKIP TURN</button> -->
         </div>
-        <div id="scoreboard">
+        <div id="lastMove" class="noselect"></div>
+        <div id="scoreboard" class="noselect">
             <h3>SCOREBOARD</h3>
-            <div id="scoreboard-content"></div>
+            <div id="scoreboard-content" class="noselect"></div>
         </div>
         <div id="root"></div>
     </div>
