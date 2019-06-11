@@ -56,6 +56,7 @@ var SocketHander = {
             var start = setInterval(function () {
                 if (count <= 0) {
                     clearInterval(start)
+                    Tutorial.start()
                 } else {
                     Game.giveLetter()
                     count--
