@@ -12,13 +12,13 @@ var Ui = {
             $("#hiddenUI").css("display", "none")
         })
 
-        $("#hideScr").on("click", function() {
+        $("#hideScr").on("click", function () {
             $("#scoreboard").css("display", "none")
             $("#showScr").css("display", "block")
             $("#hiddenScr").css("display", "block")
         })
 
-        $("#showScr").on("click", function() {
+        $("#showScr").on("click", function () {
             $("#scoreboard").css("display", "block")
             $("#showScr").css("display", "none")
             $("#hiddenScr").css("display", "none")
@@ -44,6 +44,8 @@ var Ui = {
             if (!Game.exchange) {
                 $(this).text("CANCEL REDRAWING")
                 $("#exchange").prop("disabled", false)
+                if (Game.skipCount == 3) $("#exchange").css("background-color", "red")
+                else $("#exchange").css("background-color", "")
                 $("#skip").prop("disabled", true)
                 Game.exchange = true
                 if (Game.selectedLetter) {
@@ -51,10 +53,10 @@ var Ui = {
                     Game.selectedLetter.material = Game.selectedLetter.color
                     Game.selectedLetter = null
                 }
-
             } else {
                 $(this).text("REDRAW LETTERS")
                 $("#exchange").prop("disabled", true)
+                $("#exchange").css("background-color", "")
                 $("#skip").prop("disabled", false)
                 Game.exchange = false
                 for (var count = 0; count < Game.exchangeTab.length; count++) {

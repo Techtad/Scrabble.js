@@ -128,6 +128,7 @@ var SocketHander = {
             }
         })
         this.addResponseCallback("turn-update", function (data) {
+            Game.skipCount = data.skipCount
             if (data.myTurn) {
                 Game.myTurn = true
                 $("#exchangeMode").prop("disabled", false)

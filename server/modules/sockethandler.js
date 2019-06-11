@@ -135,8 +135,8 @@ module.exports = function (SocketServer) { //SocketHandler
                         lastMoveMsg = `<span class='nickname'>${Game.getNicknames().a}</span> placed the word <span class='word'>'${data.word}'</span>.`
                     }
 
-                    Session.clientA.emit("turn-update-resp", { myTurn: Game.playerATurn(), centerTaken: data.centerTaken, lastMoveColor: lastMoveColor, lastMoveMsg: lastMoveMsg })
-                    if (Session.clientB) Session.clientB.emit("turn-update-resp", { myTurn: Game.playerBTurn(), centerTaken: data.centerTaken, lastMoveColor: lastMoveColor, lastMoveMsg: lastMoveMsg })
+                    Session.clientA.emit("turn-update-resp", { myTurn: Game.playerATurn(), centerTaken: data.centerTaken, lastMoveColor: lastMoveColor, lastMoveMsg: lastMoveMsg, skipCount: Game.playerASkipped + Game.playerBSkipped })
+                    if (Session.clientB) Session.clientB.emit("turn-update-resp", { myTurn: Game.playerBTurn(), centerTaken: data.centerTaken, lastMoveColor: lastMoveColor, lastMoveMsg: lastMoveMsg, skipCount: Game.playerASkipped + Game.playerBSkipped })
 
                 } else client.emit("end-turn-resp", { success: false })
             } else if (Session.clientB && client.id == Session.clientB.id) {
@@ -158,8 +158,8 @@ module.exports = function (SocketServer) { //SocketHandler
                         lastMoveMsg = `<span class='nickname'>${Game.getNicknames().b}</span> placed the word <span class='word'>'${data.word}'</span>.`
                     }
 
-                    if (Session.clientA) Session.clientA.emit("turn-update-resp", { myTurn: Game.playerATurn(), centerTaken: data.centerTaken, lastMoveColor: lastMoveColor, lastMoveMsg: lastMoveMsg })
-                    Session.clientB.emit("turn-update-resp", { myTurn: Game.playerBTurn(), centerTaken: data.centerTaken, lastMoveColor: lastMoveColor, lastMoveMsg: lastMoveMsg })
+                    if (Session.clientA) Session.clientA.emit("turn-update-resp", { myTurn: Game.playerATurn(), centerTaken: data.centerTaken, lastMoveColor: lastMoveColor, lastMoveMsg: lastMoveMsg, skipCount: Game.playerASkipped + Game.playerBSkipped })
+                    Session.clientB.emit("turn-update-resp", { myTurn: Game.playerBTurn(), centerTaken: data.centerTaken, lastMoveColor: lastMoveColor, lastMoveMsg: lastMoveMsg, skipCount: Game.playerASkipped + Game.playerBSkipped })
 
                 } else client.emit("end-turn-resp", { success: false })
             }
