@@ -248,6 +248,6 @@ h2 {
 .tutorialArrow {
     position: fixed;
     z-index: 101;
-    width: 160px;
-    height: 90px;
+    width: 120px;
+    height: 60px;
 }
