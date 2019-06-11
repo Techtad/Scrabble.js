@@ -80,8 +80,8 @@ var Game = {
         this.renderer.shadowMap.enabled = true
 
         this.camera = new THREE.PerspectiveCamera(45, $(window).width() / $(window).height(), 1, 10000)
-        this.camera.position.set(70, 150, 250)
-        this.camera.lookAt(this.scene.position)
+        this.camera.position.set(70, 170, 300)
+        this.camera.rotation.set(-0.64, 0, 0)
         this.camera.updateProjectionMatrix()
 
         window.addEventListener("resize", (e) => {
