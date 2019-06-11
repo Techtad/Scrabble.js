@@ -87,7 +87,7 @@ module.exports = function (SocketServer) { //SocketHandler
 
         client.on("send-nickname", function (data) {
             if (!data.nickname) { client.emit("send-nickname-resp", { accepted: false, reason: "Nickname cannot be empty" }); return; }
-            if (Lobby.getNicknames().includes(data.nickname)) { client.emit("send-nickname-resp", { accepted: false, reason: "Nickname taken, try another one" }); return; }
+            if (Lobby.getNicknames().includes(data.nickname)) { client.emit("send-nickname-resp", { accepted: false, reason: "Nickname taken" }); return; }
             if (Lobby.acceptClient(client, data.nickname)) {
                 client.emit("send-nickname-resp", { accepted: true })
                 for (let c of Lobby.getClients()) c.emit("lobby-update-resp", { players: Lobby.getPlayerInfo() })
