@@ -71,9 +71,20 @@ var Lobby = {
         Lobby.client.on("invite-player-resp", function (data) {
             console.log("Event socketowy: ", "invite-player", data)
             if (data.success) {
-                Lobby.getElem("lobbyOverlayMessage").text("Waiting for response...")
-                Lobby.getElem("lobbyOverlay").css("background-color", "rgba(0,0,0,0.5)")
-                Lobby.getElem("lobbyOverlay").css("display", "block")
+                Lobby.waitDialog = $("<div>")
+                Lobby.waitDialog.text("Waiting for response...").dialog({
+                    title: "Invitation Sent",
+                    modal: true,
+                    close: function (event, ui) {
+                        Lobby.client.emit("cancel-invitation")
+                        $(this).remove()
+                    },
+                    buttons: {
+                        "Cancel": function (event, ui) {
+                            $(this).dialog("close")
+                        },
+                    }
+                })
             } else {
                 $("<div>").text(data.reason).dialog({
                     title: "Failed to invite player",
@@ -103,6 +114,13 @@ var Lobby = {
                 }
             })
         })
+        Lobby.client.on("invitation-reply-resp", function (data) {
+            $("<div>").text(data.reason).dialog({
+                title: "Invitation Invalid",
+                modal: true,
+                close: function (event, ui) { $(this).remove() },
+            })
+        })
         Lobby.client.on("invitaion-rejected-resp", function (data) {
             console.log("Event socketowy: ", "invitaion-rejected", data)
             $("<div>").text("Your invitation has been rejected").dialog({
@@ -110,11 +128,11 @@ var Lobby = {
                 modal: true,
                 close: function (event, ui) { $(this).remove() },
             })
-            Lobby.getElem("lobbyOverlay").css("display", "none")
+            if (Lobby.waitDialog) Lobby.waitDialog.remove()
         })
         Lobby.client.on("session-ready-resp", function (data) {
             console.log("Event socketowy: ", "session-ready", data)
-            Lobby.getElem("lobbyOverlay").css("display", "none")
+            if (Lobby.waitDialog) Lobby.waitDialog.remove()
             //Game.reset()
             Lobby.client.emit("player-ready")
         })

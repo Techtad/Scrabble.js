@@ -92,19 +92,3 @@ header {
     text-align: right;
     margin-right: 10px;
 }
-
-#lobbyOverlay {
-    z-index: 99;
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    background-color: black;
-    display: none;
-}
-
-#lobbyOverlayMessage {
-    position: absolute;
-    left: 45%;
-    top: 45%;
-    color: white;
-}

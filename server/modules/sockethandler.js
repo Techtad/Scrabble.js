@@ -11,8 +11,21 @@ module.exports = function (SocketServer) { //SocketHandler
         //SessionManager.acceptClient(client)
         console.log("Klient się połączył:", client.id)
         client.on("disconnect", function () {
-            Lobby.clientLeft(client)
-            for (let c of Lobby.getClients()) c.emit("lobby-update-resp", { players: Lobby.getPlayerInfo() })
+            let nickname = Lobby.getNicknameByClient(client)
+            if (nickname) {
+                let invitations = Lobby.getInvitationsTo(nickname)
+                if (invitations.length > 0) {
+                    for (let inv of invitations) {
+                        Lobby.getClientByNickname(inv.from).emit("invitaion-rejected-resp")
+                        Lobby.removeInvitationFrom(inv.from)
+                    }
+                }
+                if (Lobby.getInvitationFrom(nickname))
+                    Lobby.removeInvitationFrom(nickname)
+
+                Lobby.clientLeft(client)
+                for (let c of Lobby.getClients()) c.emit("lobby-update-resp", { players: Lobby.getPlayerInfo() })
+            }
 
             SessionManager.clientLeft(client)
             console.log("Klient się rozłączył:", this.id)
@@ -175,11 +188,17 @@ module.exports = function (SocketServer) { //SocketHandler
 
         client.on("invite-player", function (data) {
             if (Lobby.getNicknameByClient(client) && Lobby.getClientByNickname(data.nickname)) {
+                Lobby.addInvitation(Lobby.getNicknameByClient(client), data.nickname)
                 client.emit("invite-player-resp", { success: true })
                 Lobby.getClientByNickname(data.nickname).emit("invitation-resp", { nickname: Lobby.getNicknameByClient(client) })
             } else client.emit("invite-player-resp", { success: false, reason: "That player is no longer in lobby" })
         })
         client.on("invitation-reply", function (data) {
+            if (!Lobby.getInvitationFrom(data.nickname)) {
+                client.emit("invitation-reply-resp", { reason: "The invitation has been canceled" })
+                return
+            }
+
             if (data.agreed) {
                 let clientA = Lobby.getClientByNickname(data.nickname)
                 let clientB = client
@@ -204,6 +223,10 @@ module.exports = function (SocketServer) { //SocketHandler
             } else {
                 Lobby.getClientByNickname(data.nickname).emit("invitaion-rejected-resp")
             }
+            Lobby.removeInvitationFrom(data.nickname)
+        })
+        client.on("cancel-invitation", function (data) {
+            Lobby.removeInvitationFrom(Lobby.getNicknameByClient(client))
         })
         client.on("player-ready", function (data) {
             client.emit("start-game-resp")
