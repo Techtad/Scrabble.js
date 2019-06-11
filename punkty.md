@@ -20,4 +20,4 @@ f) poprawnie oświetlona scena /omówione na zajęciach/ [2 pkt] JEST 2/2
 
 g) dynamiczny help dla gracza w trakcie gry (decyzje, podpowiedzi, stan gry, kierunek dalszej gry) [2 pkt] JESZCZE NIE
 
-Jak na razie mamy: 16/20 pkt
+Jak na razie mamy: 18/20 pkt
