@@ -58,6 +58,8 @@ var Game = {
 
         this.wordTab = []
 
+        this.swapTab = []
+
         this.selectedLetter = null
 
         this.isHorizontal = null
@@ -68,6 +70,8 @@ var Game = {
 
         this.exchangeTab = []
 
+        this.tutorialShown = false
+
         this.scene = new THREE.Scene()
 
         this.renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -76,8 +80,8 @@ var Game = {
         this.renderer.shadowMap.enabled = true
 
         this.camera = new THREE.PerspectiveCamera(45, $(window).width() / $(window).height(), 1, 10000)
-        this.camera.position.set(70, 150, 250)
-        this.camera.lookAt(this.scene.position)
+        this.camera.position.set(70, 170, 300)
+        this.camera.rotation.set(-0.64, 0, 0)
         this.camera.updateProjectionMatrix()
 
         window.addEventListener("resize", (e) => {
@@ -191,6 +195,12 @@ var Game = {
         this.tray.rotation.x = Math.PI / 4
         this.scene.add(this.tray)
 
+        this.trFake = new Tray()
+        this.trayFake = this.trFake.getTray()
+        this.trayFake.position.set(0, 3, -20)
+        this.trayFake.rotation.x = -Math.PI / 4
+            //this.trayFake.rotation.y = Math.PI
+        this.scene.add(this.trayFake)
 
     },
 
@@ -220,23 +230,24 @@ var Game = {
         this.mouseVector = new THREE.Vector2()
     },
 
-    rayClick: function() {
+    rayClick: function(event) {
+        console.log(event.button)
 
-        if (this.myTurn) {
-            //obsługa raycastera w zależności od tego, co zostało kliknięte
-            this.mouseVector.x = (event.clientX / $(window).width()) * 2 - 1;
-            this.mouseVector.y = -(event.clientY / $(window).height()) * 2 + 1;
+        //obsługa raycastera w zależności od tego, co zostało kliknięte
+        this.mouseVector.x = (event.clientX / $(window).width()) * 2 - 1;
+        this.mouseVector.y = -(event.clientY / $(window).height()) * 2 + 1;
 
-            this.raycaster.setFromCamera(this.mouseVector, this.camera);
+        this.raycaster.setFromCamera(this.mouseVector, this.camera);
 
-            this.intersects = this.raycaster.intersectObjects(this.scene.children, true);
+        this.intersects = this.raycaster.intersectObjects(this.scene.children, true);
 
-            //console.log(this.intersects.length)
-            //console.log(this.scene)
+        //console.log(this.intersects.length)
+        //console.log(this.scene)
 
-            if (this.intersects.length > 0) {
-                var obj = this.intersects[0].object
-                    //console.log(obj)
+        if (this.intersects.length > 0) {
+            var obj = this.intersects[0].object
+                //console.log(obj)
+            if (event.button == 0) {
                 if (obj.name.split("_")[0] == "letterBlock") {
                     if (!this.exchange) {
                         this.letterSelect()
@@ -250,15 +261,23 @@ var Game = {
                     } else {
                         this.exchangeMode()
                     }
-                } else if (obj.name.split("_")[0] == "tray") {
-                    this.trayMove()
                 } else if (obj.name.split("_")[0] == "tile") {
-                    if (this.selectedLetter != null) {
-                        this.letterPlaceCheck()
+                    if (this.myTurn) {
+                        if (this.selectedLetter != null) {
+                            this.letterPlaceCheck()
+                        }
                     }
-
+                }
+            } else if (event.button == 2) {
+                if (obj.name.split("_")[0] == "letterBlock") {
+                    this.swapLetters()
+                } else if (obj.name.split("_")[0] == "letter") {
+                    this.intersects[0].object = this.intersects[0].object.parent
+                    this.swapLetters()
                 }
             }
+
+
         } else {
             //alert("Nie twoja tura śmieciu")
         }
@@ -306,25 +325,27 @@ var Game = {
         }
     },
 
-    trayMove: function() {
+    swapLetters: function() {
         var obj = this.intersects[0].object
             //jeśli jakiś klocek jest zaznaczony i nie znajduje się na planszy, tylko na trayu, następuje zmiana miejsca w trayu i w tablicy
             //WAŻNE - jeśli klocek X został postawiony na planszy, a później klocek Y zostanie postawiony na trayu na poprzednim miejscu klocka X...
             //...to klocek X po zdjeciu z planszy wskoczy na poprzednie miejsce klocka Y
         if (this.selectedLetter != null) {
             if (this.wordTab.indexOf(this.selectedLetter) == "-1") {
-                var clickedID = obj.name.split("_")[1]
-                var swappedID = this.selectedLetter.position.x / 10
-                var traySwap = this.trayTab[clickedID]
-                this.trayTab[clickedID] = this.trayTab[swappedID]
-                this.trayTab[swappedID] = traySwap
-                this.selectedLetter.position.x = obj.position.x
+                var toSwapPosX = obj.position.x
+                var toSwapID = this.trayTab.indexOf(obj)
+                var selectedID = this.selectedLetter.position.x / 10
+                var traySwap = this.trayTab[toSwapID]
+                this.trayTab[toSwapID] = this.trayTab[selectedID]
+                this.trayTab[selectedID] = traySwap
+                obj.position.x = this.selectedLetter.position.x
+                this.selectedLetter.position.x = toSwapPosX
                 this.selectedLetter.color = "white"
                 this.selectedLetter.material = this.selectedLetter.color
                 this.selectedLetter = null
-                    //console.log(this.trayTab)
             }
         }
+
     },
 
     letterPlaceCheck: function() {
@@ -631,7 +652,12 @@ var Game = {
         if (this.centerTaken()) {
             this.acceptWord()
         } else {
-            alert("You have to place any block on the yellow square")
+            $("<div>").text("You have to place any block on the yellow square").dialog({
+                title: "Invalid first move",
+                modal: true,
+                resizable: false,
+                close: function(event, ui) { $(this).remove() },
+            })
         }
     },
 
@@ -702,10 +728,13 @@ var Game = {
         }
 
         SocketHander.emit("check-word", { word: word }, function(data) {
-            alert(`Word '${data.word}' is ${data.answer ? "correct" : "incorrect"}!`)
+            if (!data.answer) {
+                $("#lastMove").css("color", "red")
+                $("#lastMove").html(`The word <span class='word'>'${data.word}'</span> is incorrect!`)
+            }
 
             if (data.answer) {
-                SocketHander.emit("end-turn", { skip: false, centerTaken: true, }, function(data) {
+                SocketHander.emit("end-turn", { skip: false, centerTaken: true, word: data.word }, function(data) {
                     if (!data.success) {
                         alert("ERROR: Not my turn")
                         return
@@ -861,5 +890,67 @@ var Game = {
     resume: function() {
         this.paused = false
         requestAnimationFrame(this.update.bind(this))
+    },
+
+    clearTray: function() {
+        for (let i in this.trayTab) {
+            let obj = this.trayTab[i]
+            this.scene.remove(obj)
+            this.trayTab[i] = "/"
+        }
+    },
+
+    reset: function() {
+        Ui.blockEverything()
+
+        this.scoreboard = {
+            myName: "",
+            myScore: 0,
+            opponentName: "",
+            opponentScore: 0,
+        }
+        this.myTurn = null
+        this.boardLetters = [
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+        ]
+        this.updateBoardLetters()
+        this.boardTab = [
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+            ["/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/", "/"],
+        ]
+        this.wordTab = []
+        this.selectedLetter = null
+        this.isHorizontal = null
+        this.firstMove = true
+        this.exchange = false
+        this.tutorialShown = false
+        this.clearTray()
     }
 }

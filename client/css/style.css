@@ -1,7 +1,31 @@
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+#lobby {
+    z-index: 45;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+}
+
+#game {
+    display: none;
 }
 
 canvas {
@@ -13,9 +37,70 @@ canvas {
     z-index: 1;
     width: 224px;
     height: 220px;
-    border: 2px orange outset;
-    background: yellow;
+    border: 2px #8e846b outset;
+    background: #feeebd;
     border-radius: 5px;
+}
+
+#hiddenUI {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    width: 42px;
+    height: 42px;
+    border: 2px #8e846b outset;
+    background: #feeebd;
+    border-radius: 5px;
+}
+
+#hiddenScr {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    width: 42px;
+    height: 42px;
+    border: 2px #8e846b outset;
+    background: #feeebd;
+    border-radius: 5px;
+    right: 0px;
+}
+
+#title {
+    text-align: left;
+    padding: 10px;
+}
+
+#scrTitle {
+    text-align: left;
+    padding: 10px;
+}
+
+#lastMove {
+    position: fixed;
+    z-index: 1;
+    width: calc(100vw - 482px);
+    /* width: 50vw; */
+    /* height: 42px; */
+    line-height: 32px;
+    padding: 2px;
+    border: 2px #8e846b outset;
+    background: #feeebd;
+    border-radius: 5px;
+    left: 240px;
+    top: 0;
+    color: #8e846b;
+    text-align: center;
+    font-size: 21px;
+    text-transform: uppercase;
+    /* overflow: hidden; */
+}
+
+.word {
+    color: blue;
+}
+
+.nickname {
+    color: green;
 }
 
 #scoreboard {
@@ -24,24 +109,69 @@ canvas {
     right: 0;
     width: 224px;
     height: 110px;
-    border: 2px orange outset;
-    background: yellow;
+    border: 2px #8e846b outset;
+    background: #feeebd;
     border-radius: 5px;
 }
 
 #scoreboard-content {
-    margin-top: 12px;
+    margin-top: 0px;
 }
 
 button {
-    border: 2px orange outset;
+    border: 2px #8e846b outset;
     background: white;
-    color: darkorange;
+    color: #8e846b;
     border-radius: 5px;
 }
 
-button:disabled, button[disabled] {
+button:disabled,
+button[disabled] {
     background: black;
+}
+
+#hideUI {
+    position: absolute;
+    top: 13px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+}
+
+#showUI {
+    display: none;
+    position: absolute;
+    top: 9px;
+    left: 9px;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+}
+
+#hideScr {
+    position: absolute;
+    top: 13px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+}
+
+#showScr {
+    display: none;
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+}
+
+#turnStatus {
+    padding-top: 5px;
+    text-align: center;
+    color: #8e846b;
 }
 
 #letterGet {
@@ -50,12 +180,6 @@ button:disabled, button[disabled] {
     left: 10px;
     width: 200px;
     height: 50px;
-}
-
-#turnStatus {
-    padding-top: 20px;
-    text-align: center;
-    color: darkorange;
 }
 
 #placeWord {
@@ -99,8 +223,12 @@ button:disabled, button[disabled] {
 }
 
 h3 {
-    color: darkorange;
+    color: #8e846b;
     text-align: center;
+}
+
+h2 {
+    color: #8e846b;
 }
 
 #overlay {
@@ -117,4 +245,11 @@ h3 {
     left: 45%;
     top: 45%;
     color: white;
+}
+
+.tutorialArrow {
+    position: fixed;
+    z-index: 101;
+    width: 120px;
+    height: 60px;
 }

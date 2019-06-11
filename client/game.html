@@ -5,19 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/jquery-ui.min.css">
     <link rel="stylesheet" href="css/style.css">
     <!-- Biblioteki -->
-    <script src="js/lib/jquery.js"></script>
+    <script src="js/lib/jquery.min.js"></script>
+    <script src="js/lib/jquery-ui.min.js"></script>
     <script src="js/lib/socket.io.js"></script>
     <script src="js/lib/three.min.js"></script>
     <script src="js/lib/OrbitControls.js"></script>
-    <!-- Ustawienia i moduły -->
-    <script src="js/settings.js"></script>
-    <script src="js/lib/util.js"></script>
-    <script src="js/socket.js"></script>
-    <script src="js/ui.js"></script>
     <script src="js/lib/MTLLoader.js"></script>
     <script src="js/lib/OBJLoader.js"></script>
+    <script src="js/lib/util.js"></script>
+    <!-- Ustawienia i moduły -->
+    <script src="js/settings.js"></script>
+    <script src="js/socket.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/tutorial.js"></script>
     <!-- Pliki gry(3D) -->
     <script src="js/resources.js"></script>
     <script src="js/tile.js"></script>
@@ -27,29 +30,42 @@
     <script src="js/lib/grid.js"></script>
     <script src="js/game.js"></script>
     <!-- Main -->
+    <script src="js/lobby/lobby.js"></script>
     <script src="js/main.js"></script>
     <title>Scrabble</title>
 </head>
 
 <body>
-    <div id="overlay">
-        <div id="overlayMessage"></div>
+    <iframe id="lobby" src="/lobby.html" frameborder="0"></iframe>
+    <div id="game">
+        <div id="overlay">
+            <div id="overlayMessage" class="noselect"></div>
+        </div>
+        <div id="hiddenUI">
+            <button id="showUI">+</button>
+        </div>
+        <div id="ui" class="noselect">
+            <h2 id="title">SCRUBBLE</h2>
+            <button id="hideUI">-</button>
+            <!-- <button id="letterGet">START GAME</button><br> -->
+            <h3 id="turnStatus">WAITING FOR OPPONENT</h3>
+            <button id="placeWord" disabled>PLACE WORD</button>
+            <button id="wordReset" disabled>RESET WORD</button><br>
+            <button id="exchangeMode" disabled>REDRAW LETTERS</button>
+            <button id="exchange" disabled>REDRAW!</button><br>
+            <!-- <button id="skip" disabled>SKIP TURN</button> -->
+        </div>
+        <div id="lastMove" class="noselect"> </div>
+        <div id="hiddenScr">
+            <button id="showScr">+</button>
+        </div>
+        <div id="scoreboard" class="noselect">
+            <h2 id="scrTitle">SCOREBOARD</h2>
+            <button id="hideScr">-</button>
+            <div id="scoreboard-content" class="noselect"></div>
+        </div>
+        <div id="root"></div>
     </div>
-    <div id="ui">
-        <h3>SCRIBABLE SRIBUBLE</h3>
-        <!-- <button id="letterGet">START GAME</button><br> -->
-        <h3 id="turnStatus">WAITING FOR OPPONENT</h3>
-        <button id="placeWord" disabled>PLACE WORD</button>
-        <button id="wordReset" disabled>RESET WORD</button><br>
-        <button id="exchangeMode" disabled>REDRAW LETTERS</button>
-        <button id="exchange" disabled>REDRAW!</button><br>
-        <!-- <button id="skip" disabled>SKIP TURN</button> -->
-    </div>
-    <div id="scoreboard">
-        <h3>SCOREBOARD</h3>
-        <div id="scoreboard-content"></div>
-    </div>
-    <div id="root"></div>
 </body>
 
 </html>
