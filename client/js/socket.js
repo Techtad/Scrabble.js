@@ -116,18 +116,9 @@ var SocketHander = {
                 console.log(Game.firstMove)
 
             }
+            $("#lastMove").css("color", data.lastMoveColor)
+            $("#lastMove").html(data.lastMoveMsg)
         })
-
-        /* this.addResponseCallback("send-nickname", function (data) {
-            if (!data.accepted) {
-                let nick = prompt("Nickname taken, try again:")
-                SocketHander.emit("send-nickname", { nickname: nick })
-            }
-        })
-
-        let nick = prompt("Enter nickname:")
-        while (!nick) nick = prompt("Enter non-empty nickname:")
-        SocketHander.emit("send-nickname", { nickname: nick }) */
     },
 
     callbacks: [],

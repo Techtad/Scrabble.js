@@ -1,3 +1,12 @@
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -31,6 +40,32 @@ canvas {
     border: 2px orange outset;
     background: yellow;
     border-radius: 5px;
+}
+
+#lastMove {
+    position: fixed;
+    z-index: 1;
+    width: 500px;
+    height: 42px;
+    line-height: 32px;
+    padding: 2px;
+    border: 2px orange outset;
+    background: yellow;
+    border-radius: 5px;
+    left: calc(50vw - 250px);
+    top: 0;
+    color: orange;
+    text-align: center;
+    font-size: 21px;
+    text-transform: uppercase;
+}
+
+.word {
+    color: blue;
+}
+
+.nickname {
+    color: green;
 }
 
 #scoreboard {
