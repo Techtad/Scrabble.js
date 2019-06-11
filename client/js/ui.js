@@ -3,14 +3,26 @@ var Ui = {
         $("#hideUI").on("click", function () {
             $("#ui").css("display", "none")
             $("#showUI").css("display", "block")
+            $("#hiddenUI").css("display", "block")
         })
 
         $("#showUI").on("click", function () {
             $("#ui").css("display", "block")
             $("#showUI").css("display", "none")
-
+            $("#hiddenUI").css("display", "none")
         })
 
+        $("#hideScr").on("click", function() {
+            $("#scoreboard").css("display", "none")
+            $("#showScr").css("display", "block")
+            $("#hiddenScr").css("display", "block")
+        })
+
+        $("#showScr").on("click", function() {
+            $("#scoreboard").css("display", "block")
+            $("#showScr").css("display", "none")
+            $("#hiddenScr").css("display", "none")
+        })
 
         $("#letterGet").on("click", function () {
             var count = 15
